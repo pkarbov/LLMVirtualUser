@@ -10,9 +10,9 @@ use PHPUnit\Framework\TestCase;
 use OCP\AppFramework\Http;
 use OCP\IRequest;
 
-use OCA\LLMVirtualUser\Service\NoteNotFound;
-use OCA\LLMVirtualUser\Service\NoteService;
-use OCA\LLMVirtualUser\Controller\NoteController;
+use OCA\LLaMaVirtualUser\Service\NoteNotFound;
+use OCA\LLaMaVirtualUser\Service\NoteService;
+use OCA\LLaMaVirtualUser\Controller\NoteController;
 
 class NoteControllerTest extends TestCase {
 	protected NoteController $controller;

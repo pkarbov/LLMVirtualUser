@@ -10,8 +10,8 @@ use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 
-use OCA\LLMVirtualUser\Db\Note;
-use OCA\LLMVirtualUser\Db\NoteMapper;
+use OCA\LLaMaVirtualUser\Db\Note;
+use OCA\LLaMaVirtualUser\Db\NoteMapper;
 
 class NoteService {
 	private NoteMapper $mapper;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace OCA\LLaMaVirtualUser\Tests\Unit\Controller;
 
-use OCA\LLMVirtualUser\Controller\NoteApiController;
+use OCA\LLaMaVirtualUser\Controller\NoteApiController;
 
 class NoteApiControllerTest extends NoteControllerTest {
 	public function setUp(): void {

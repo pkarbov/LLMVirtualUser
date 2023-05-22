@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace OCA\LLaMaVirtualUser\Controller;
 
-use OCA\LLMVirtualUser\AppInfo\Application;
+use OCA\LLaMaVirtualUser\AppInfo\Application;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;

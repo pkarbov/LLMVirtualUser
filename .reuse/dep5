@@ -1,5 +1,5 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: L L M Virtual User
+Upstream-Name: LLaMa Virtual User
 Upstream-Contact: Pavlo Karbovnyk <pkarbovn@gmail.com>
 Source: https://github.com/nextcloud/profiler
 

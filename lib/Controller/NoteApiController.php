@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace OCA\LLaMaVirtualUser\Controller;
 
-use OCA\LLMVirtualUser\AppInfo\Application;
-use OCA\LLMVirtualUser\Service\NoteService;
+use OCA\LLaMaVirtualUser\AppInfo\Application;
+use OCA\LLaMaVirtualUser\Service\NoteService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;

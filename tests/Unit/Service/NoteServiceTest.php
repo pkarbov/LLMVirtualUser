@@ -10,9 +10,9 @@ use PHPUnit\Framework\TestCase;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 
-use OCA\LLMVirtualUser\Db\Note;
-use OCA\LLMVirtualUser\Service\NoteService;
-use OCA\LLMVirtualUser\Db\NoteMapper;
+use OCA\LLaMaVirtualUser\Db\Note;
+use OCA\LLaMaVirtualUser\Service\NoteService;
+use OCA\LLaMaVirtualUser\Db\NoteMapper;
 
 class NoteServiceTest extends TestCase {
 	private NoteService $service;
