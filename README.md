@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: Pavlo Karbovnyk <pkarbovn@gmail.com>
 SPDX-License-Identifier: CC0-1.0
 -->
 
-# LLM Virtual User
+# LLaMa Virtual User
 Place this app in **nextcloud/apps/**
 
 ## Building the app

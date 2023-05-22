@@ -1,6 +1,6 @@
 {
 	"name": "nextcloud/llmvirtualuser",
-	"description": "LLM Virtual User",
+	"description": "LLaMa Virtual User",
 	"type": "project",
 	"license": "AGPL-3.0-or-later",
 	"authors": [
