@@ -5,18 +5,18 @@
     SPDX-FileCopyrightText: Pavlo Karbovnyk <pkarbovn@gmail.com>
     SPDX-License-Identifier: CC0-1.0
     -->
-    <id>llmvirtualuser</id>
-    <name>L L M Virtual User</name>
-    <summary>LLM Virtual User</summary>
-    <description><![CDATA[LLMChatUser Virtual user functions: 
+    <id>llamavirtualuser</id>
+    <name>LLaMa Virtual User</name>
+    <summary>LLaMa Virtual User</summary>
+    <description><![CDATA[LLaMa Virtual user functions:
 
 1) Conduct chats similar to ChatGPT.
 2) Search folder with PDF documents. Answer questions based on these documents.
 3) Search internet for specific information.]]></description>
     <version>0.0.1</version>
     <licence>agpl</licence>
-    <author mail="pkarbovn@gmail.com" homepage="https://sait.geoid.ca">Pavlo Karbovnyk</author>
-    <namespace>LLMVirtualUser</namespace>
+    <author mail="pkarbovn@gmail.com" homepage="https://github.com/pkarbov/nextcloud-llama">Pavlo Karbovnyk</author>
+    <namespace>LLaMaVirtualUser</namespace>
     <category>monitoring</category>
     <category>office</category>
     <category>tools</category>
@@ -26,8 +26,8 @@
     </dependencies>
     <navigations>
         <navigation>
-            <name>L L M Virtual User</name>
-            <route>llmvirtualuser.page.index</route>
+            <name>LLaMa Virtual User</name>
+            <route>llamavirtualuser.page.index</route>
         </navigation>
     </navigations>
 </info>
