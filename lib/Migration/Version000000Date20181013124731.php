@@ -3,7 +3,7 @@ declare(strict_types=1);
 // SPDX-FileCopyrightText: Pavlo Karbovnyk <pkarbovn@gmail.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-namespace OCA\LLMVirtualUser\Migration;
+namespace OCA\LLaMaVirtualUser\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
@@ -22,8 +22,8 @@ class Version000000Date20181013124731 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if (!$schema->hasTable('llmvirtualuser')) {
-			$table = $schema->createTable('llmvirtualuser');
+		if (!$schema->hasTable('llamavirtualuser')) {
+			$table = $schema->createTable('llamavirtualuser');
 			$table->addColumn('id', 'integer', [
 				'autoincrement' => true,
 				'notnull' => true,
@@ -42,7 +42,7 @@ class Version000000Date20181013124731 extends SimpleMigrationStep {
 			]);
 
 			$table->setPrimaryKey(['id']);
-			$table->addIndex(['user_id'], 'llmvirtualuser_user_id_index');
+			$table->addIndex(['user_id'], 'llamavirtualuser_user_id_index');
 		}
 		return $schema;
 	}

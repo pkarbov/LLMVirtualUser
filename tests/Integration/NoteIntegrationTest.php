@@ -3,7 +3,7 @@ declare(strict_types=1);
 // SPDX-FileCopyrightText: Pavlo Karbovnyk <pkarbovn@gmail.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-namespace OCA\LLMVirtualUser\Tests\Integration\Controller;
+namespace OCA\LLaMaVirtualUser\Tests\Integration\Controller;
 
 use OCP\AppFramework\App;
 use OCP\IRequest;
@@ -19,7 +19,7 @@ class NoteIntegrationTest extends TestCase {
 	private string $userId = 'john';
 
 	public function setUp(): void {
-		$app = new App('llmvirtualuser');
+		$app = new App('llamavirtualuser');
 		$container = $app->getContainer();
 
 		// only replace the user id

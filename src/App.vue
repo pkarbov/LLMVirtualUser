@@ -3,18 +3,18 @@
     SPDX-FileCopyrightText: Pavlo Karbovnyk <pkarbovn@gmail.com>
     SPDX-License-Identifier: AGPL-3.0-or-later
     -->
-	<div id="content" class="app-llmvirtualuser">
+	<div id="content" class="app-llamavirtualuser">
 		<AppNavigation>
 			<AppNavigationNew v-if="!loading"
-				:text="t('llmvirtualuser', 'New note')"
+				:text="t('llamavirtualuser', 'New note')"
 				:disabled="false"
-				button-id="new-llmvirtualuser-button"
+				button-id="new-llamavirtualuser-button"
 				button-class="icon-add"
 				@click="newNote" />
 			<ul>
 				<AppNavigationItem v-for="note in notes"
 					:key="note.id"
-					:title="note.title ? note.title : t('llmvirtualuser', 'New note')"
+					:title="note.title ? note.title : t('llamavirtualuser', 'New note')"
 					:class="{active: currentNoteId === note.id}"
 					@click="openNote(note)">
 					<template slot="actions">
@@ -22,13 +22,13 @@
 							icon="icon-close"
 							@click="cancelNewNote(note)">
 							{{
-							t('llmvirtualuser', 'Cancel note creation') }}
+							t('llamavirtualuser', 'Cancel note creation') }}
 						</ActionButton>
 						<ActionButton v-else
 							icon="icon-delete"
 							@click="deleteNote(note)">
 							{{
-							 t('llmvirtualuser', 'Delete note') }}
+							 t('llamavirtualuser', 'Delete note') }}
 						</ActionButton>
 					</template>
 				</AppNavigationItem>
@@ -43,14 +43,14 @@
 				<textarea ref="content" v-model="currentNote.content" :disabled="updating" />
 				<input type="button"
 					class="primary"
-					:value="t('llmvirtualuser', 'Save')"
+					:value="t('llamavirtualuser', 'Save')"
 					:disabled="updating || !savePossible"
 					@click="saveNote">
 			</div>
 			<div v-else id="emptycontent">
 				<div class="icon-file" />
 				<h2>{{
-				 t('llmvirtualuser', 'Create a note to get started') }}</h2>
+				 t('llamavirtualuser', 'Create a note to get started') }}</h2>
 			</div>
 		</AppContent>
 	</div>
@@ -110,7 +110,7 @@ export default {
 	 */
 	async mounted() {
 		try {
-			const response = await axios.get(generateUrl('/apps/llmvirtualuser/notes'))
+			const response = await axios.get(generateUrl('/apps/llamavirtualuser/notes'))
 			this.notes = response.data
 		} catch (e) {
 			console.error(e)
@@ -176,7 +176,7 @@ export default {
 		async createNote(note) {
 			this.updating = true
 			try {
-				const response = await axios.post(generateUrl('/apps/llmvirtualuser/notes'), note)
+				const response = await axios.post(generateUrl('/apps/llamavirtualuser/notes'), note)
 				const index = this.notes.findIndex((match) => match.id === this.currentNoteId)
 				this.$set(this.notes, index, response.data)
 				this.currentNoteId = response.data.id
@@ -193,7 +193,7 @@ export default {
 		async updateNote(note) {
 			this.updating = true
 			try {
-				await axios.put(generateUrl(`/apps/llmvirtualuser/notes/${note.id}`), note)
+				await axios.put(generateUrl(`/apps/llamavirtualuser/notes/${note.id}`), note)
 			} catch (e) {
 				console.error(e)
 				showError(t('notestutorial', 'Could not update the note'))
@@ -206,15 +206,15 @@ export default {
 		 */
 		async deleteNote(note) {
 			try {
-				await axios.delete(generateUrl(`/apps/llmvirtualuser/notes/${note.id}`))
+				await axios.delete(generateUrl(`/apps/llamavirtualuser/notes/${note.id}`))
 				this.notes.splice(this.notes.indexOf(note), 1)
 				if (this.currentNoteId === note.id) {
 					this.currentNoteId = null
 				}
-				showSuccess(t('llmvirtualuser', 'Note deleted'))
+				showSuccess(t('llamavirtualuser', 'Note deleted'))
 			} catch (e) {
 				console.error(e)
-				showError(t('llmvirtualuser', 'Could not delete the note'))
+				showError(t('llamavirtualuser', 'Could not delete the note'))
 			}
 		},
 	},

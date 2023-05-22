@@ -3,9 +3,9 @@ declare(strict_types=1);
 // SPDX-FileCopyrightText: Pavlo Karbovnyk <pkarbovn@gmail.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-namespace OCA\LLMVirtualUser\Tests\Unit\Service;
+namespace OCA\LLaMaVirtualUser\Tests\Unit\Service;
 
-use OCA\LLMVirtualUser\Service\NoteNotFound;
+use OCA\LLaMaVirtualUser\Service\NoteNotFound;
 use PHPUnit\Framework\TestCase;
 
 use OCP\AppFramework\Db\DoesNotExistException;
