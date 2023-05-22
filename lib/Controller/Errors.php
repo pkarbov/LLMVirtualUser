@@ -10,7 +10,7 @@ use Closure;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\LLMVirtualUser\Service\NoteNotFound;
+use OCA\LLaMaVirtualUser\Service\NoteNotFound;
 
 trait Errors {
 	protected function handleNotFound(Closure $callback): DataResponse {

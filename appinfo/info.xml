@@ -20,7 +20,7 @@
     <category>monitoring</category>
     <category>office</category>
     <category>tools</category>
-    <bugs>https://office.geoid.ca</bugs>
+    <bugs>https://github.com/pkarbov/nextcloud-llama</bugs>
     <dependencies>
         <nextcloud min-version="25" max-version="25"/>
     </dependencies>

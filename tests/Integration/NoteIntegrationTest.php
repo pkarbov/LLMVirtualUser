@@ -9,9 +9,9 @@ use OCP\AppFramework\App;
 use OCP\IRequest;
 use PHPUnit\Framework\TestCase;
 
-use OCA\LLMVirtualUser\Db\Note;
-use OCA\LLMVirtualUser\Db\NoteMapper;
-use OCA\LLMVirtualUser\Controller\NoteController;
+use OCA\LLaMaVirtualUser\Db\Note;
+use OCA\LLaMaVirtualUser\Db\NoteMapper;
+use OCA\LLaMaVirtualUser\Controller\NoteController;
 
 class NoteIntegrationTest extends TestCase {
 	private NoteController $controller;
