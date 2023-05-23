@@ -22,12 +22,13 @@
     <category>tools</category>
     <bugs>https://github.com/pkarbov/nextcloud-llama</bugs>
     <dependencies>
-        <nextcloud min-version="25" max-version="25"/>
+        <nextcloud min-version="25" max-version="27"/>
     </dependencies>
+
     <navigations>
-        <navigation>
-            <name>LLaMa Virtual User</name>
-            <route>llamavirtualuser.page.index</route>
-        </navigation>
     </navigations>
+
+    <commands>
+        <command>OCA\LLaMaVirtualUser\Command\LLaMaConnect</command>
+    </commands>
 </info>
