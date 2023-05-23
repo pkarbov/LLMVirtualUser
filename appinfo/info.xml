@@ -16,11 +16,15 @@
     <version>0.0.1</version>
     <licence>agpl</licence>
     <author mail="pkarbovn@gmail.com" homepage="https://github.com/pkarbov/nextcloud-llama">Pavlo Karbovnyk</author>
+
     <namespace>LLaMaVirtualUser</namespace>
+
     <category>monitoring</category>
     <category>office</category>
     <category>tools</category>
+
     <bugs>https://github.com/pkarbov/nextcloud-llama</bugs>
+
     <dependencies>
         <nextcloud min-version="25" max-version="27"/>
     </dependencies>
@@ -31,4 +35,5 @@
     <commands>
         <command>OCA\LLaMaVirtualUser\Command\LLaMaConnect</command>
     </commands>
+
 </info>
