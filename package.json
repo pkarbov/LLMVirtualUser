@@ -2,15 +2,25 @@
   "name": "llamavirtualuser",
   "description": "LLaMa Virtual User",
   "version": "0.0.1",
-  "author": "Pavlo Karbovnyk <pkarbovn@gmail.com>",
-  "contributors": [],
+  "keywords": [
+    "llama",
+    "nextcloud",
+    "integration"
+  ],
+  "homepage": "https://github.com/pkarbov/nextcloud-llama",
   "bugs": {
     "url": "https://github.com/pkarbov/nextcloud-llama"
   },
-  "license": "agpl",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pkarbov/nextcloud-llama"
+  },
+  "license": "AGPL-3.0",
   "private": true,
+  "author": "Pavlo Karbovnyk <pkarbovn@gmail.com>",
+  "contributors": [],
   "scripts": {
-    "build": "webpack --node-env production --progress",
+    "build": "webpack --node-env production  --progress",
     "dev": "webpack --node-env development --progress",
     "watch": "webpack --node-env development --progress --watch",
     "serve": "webpack --node-env development serve --progress",
@@ -19,25 +29,40 @@
     "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue",
     "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
   },
-  "dependencies": {
-    "@nextcloud/axios": "^1.10.0",
-    "@nextcloud/dialogs": "^3.1.4",
-    "@nextcloud/router": "^2.0.0",
-    "@nextcloud/vue": "^5.4.0",
-    "vue": "^2.7.0"
-  },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
   ],
-  "engines": {
-    "node": "^16.0.0",
-    "npm": "^7.0.0 || ^8.0.0"
+  "dependencies": {
+    "@mdi/svg": "^7.2.96",
+    "@nextcloud/auth": "^2.0.0",
+    "@nextcloud/axios": "^2.3.0",
+    "@nextcloud/calendar-js": "^6.0.0",
+    "@nextcloud/dialogs": "^4.0.1",
+    "@nextcloud/initial-state": "^2.0.0",
+    "@nextcloud/l10n": "^2.1.0",
+    "@nextcloud/moment": "^1.2.1",
+    "@nextcloud/router": "^2.1.1",
+    "@nextcloud/vue": "^7.10.0",
+    "@nextcloud/vue-dashboard": "^2.0.1",
+    "@nextcloud/vue-richtext": "^2.1.0-beta.6",
+    "pinia": "^2.1.3",
+    "vue": "^2.7.14",
+    "vue-click-outside": "^1.1.0",
+    "vue-clipboard2": "^0.3.3",
+    "vue-material-design-icons": "^5.2.0"
   },
   "devDependencies": {
     "@nextcloud/babel-config": "^1.0.0",
     "@nextcloud/browserslist-config": "^2.2.0",
     "@nextcloud/eslint-config": "^8.0.0",
     "@nextcloud/stylelint-config": "^2.1.2",
-    "@nextcloud/webpack-vue-config": "^5.2.1"
+    "@nextcloud/webpack-vue-config": "^5.2.1",
+    "eslint": "^8.41.0",
+    "eslint-webpack-plugin": "^4.0.1",
+    "stylelint-webpack-plugin": "^4.1.1"
+  },
+  "engines": {
+    "node": "^16.0.0",
+    "npm": "^7.0.0 || ^8.0.0"
   }
 }

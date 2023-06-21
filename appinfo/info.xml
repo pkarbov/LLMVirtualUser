@@ -33,7 +33,15 @@
     </navigations>
 
     <commands>
-        <command>OCA\LLaMaVirtualUser\Command\LLaMaConnect</command>
+        <command>OCA\LLaMaVirtualUser\Command\Connect</command>
     </commands>
+
+    <settings>
+        <admin>OCA\LLaMaVirtualUser\Settings\Admin</admin>
+        <admin-section>OCA\LLaMaVirtualUser\Settings\AdminSection</admin-section>
+
+        <personal>OCA\LLaMaVirtualUser\Settings\Personal</personal>
+        <personal-section>OCA\LLaMaVirtualUser\Settings\PersonalSection</personal-section>
+    </settings>
 
 </info>
