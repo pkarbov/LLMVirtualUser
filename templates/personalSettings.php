@@ -30,4 +30,15 @@ $appId = OCA\LLaMaVirtualUser\AppInfo\Application::APP_ID;
 \OCP\Util::addScript($appId, $appId . '-personalSettings');
 ?>
 
-<div id="llama_prefs"></div>
+<div id="llama_personal">
+    <div class="section" id="llama_personal_server_status">
+        <h2>
+            <?php p($l->t('LLaMa Integration')) ?>
+        </h2>
+    </div>
+    <div class="section" id="llama_request_settings">
+        <h2>
+            <?php p($l->t('Request Settings')) ?>
+        </h2>
+    </div>
+</div>

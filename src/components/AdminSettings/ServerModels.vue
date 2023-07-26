@@ -101,8 +101,10 @@ import axios from '@nextcloud/axios'
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapActions } from 'pinia'
-import { globalStore, EngineConst } from '../../globalStore.js'
-import { humanModelType, humanFileSize } from '../../utils.js'
+
+import { Timer } from '../../utils/timer.js'
+import { humanModelType, humanFileSize } from '../../utils/size.js'
+import { globalStore, EngineConst } from '../../utils/settings.js'
 
 export default {
     name: 'ServerModels',
@@ -129,9 +131,9 @@ export default {
     },
 
     mounted() {
-      this.gStore.$onAction(this.callbackAction)
+      this.gStore.$onAction(this.gStoreCallbackAction)
+      this.update_timer = new Timer(this.checkEngineConnection)
 	    // set only one active
-      this.updateModels(this.models)
     },
 
     methods: {
@@ -140,6 +142,9 @@ export default {
       humanModelType,
 
       ...mapActions(globalStore, ['model_set']),
+
+      ...mapActions(globalStore, ['engine_error']),
+      ...mapActions(globalStore, ['engine_active']),
 
       activeLabel(model) {
         // console.log('ServerModels::activeLabel')
@@ -165,22 +170,31 @@ export default {
       // ***********************************************************************
       // ***********************************************************************
 
-      callbackAction(value) {
-        // console.log('ServerModels::callbackAction', value)
+      gStoreCallbackAction(value) {
+        // console.log('ServerModels::gStoreCallbackAction', value)
         if (value.name === 'server_connected') {
           this.getModels()
         } else if (value.name === 'engine_error') {
 	        this.models.forEach((model) => {
 	          if (model.active) model.active = false
 	        })
+        } else if (value.name === 'engine_active') {
+          if (value.args.length === 1) {
+            const mdId = value.args[0][1].replace(/"/g, '')
+            this.models.forEach((model) => {
+	            model.active = (model.id === mdId)
+              // console.log('ServerModels::gStoreCallbackAction', mdId, model.id)
+              // console.log('ServerModels::gStoreCallbackAction', model.active)
+	          })
+          }
         }
       },
       // ***********************************************************************
 
-      getModels() {
+      async getModels() {
         // console.log('ModelSettings::getModels')
         const url = generateUrl('/apps/llamavirtualuser/server-models')
-        axios.get(url).then((response) => {
+        await axios.get(url).then((response) => {
           // console.log(response.data)
           this.models = response.data
           this.updateModels(this.models)
@@ -190,20 +204,51 @@ export default {
       },
 
       // ***********************************************************************
-      updateModels(models) {
+      updateModels(models, id = null) {
         // console.log('ServerModels::updateModels')
 	      let bFound = false
 	      models.forEach((model) => {
 	        if (bFound) model.active = false
-	        if (model.active) {
-	          bFound = true
-	          this.model_set(model)
+	        if (!id) {
+	          if (model.active) {
+	            bFound = true
+	            this.model_set(model)
+	          }
+	        } else {
+	          if (model.id === id) {
+	            bFound = true
+	            model.active = true
+	            this.model_set(model)
+	          }
 	        }
 	      })
       },
       // ***********************************************************************
       // ***********************************************************************
-
+      // check connection
+      async checkEngineConnection() {
+        console.log('ServerAddress::checkEngineConnection')
+        // this.update_timer = new Timer(this.checkConnection)
+        const url = generateUrl('/apps/llamavirtualuser/engine-status')
+        // call route admin-config
+        await axios.get(url).then((response) => {
+          // console.log(response)
+          this.update_timer = new Timer(this.checkEngineConnection)
+          switch (response.data.connected[0]) {
+            case 0 :
+              this.engine_error()
+            break
+            case 2 :
+              this.engine_active(response.data.connected)
+            break
+          }
+        }).catch((error) => {
+          this.update_timer = new Timer(this.checkEngineConnection)
+          this.engine_error()
+          // this.update_timer.pause()
+          console.error(error)
+        })
+      },
     },
 }
 </script>

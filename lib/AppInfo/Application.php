@@ -26,12 +26,27 @@ declare(strict_types=1);
 
 namespace OCA\LLaMaVirtualUser\AppInfo;
 
-use OCP\AppFramework\App;
 
-class Application extends App {
+use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Security\CSP\AddContentSecurityPolicyEvent;
+
+use OCA\LLaMaVirtualUser\Listener\CSPListener;
+
+class Application extends App implements IBootstrap {
     public const APP_ID = 'llamavirtualuser';
 
-    public function __construct() {
-        parent::__construct(self::APP_ID);
+    public function __construct(array $urlParams = []) {
+        parent::__construct(self::APP_ID, $urlParams);
     }
+
+    public function boot(IBootContext $context): void {
+    }
+
+    public function register(IRegistrationContext $context): void {
+        $context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
+    }
+
 }

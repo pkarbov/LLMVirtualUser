@@ -20,5 +20,7 @@ module.exports = {
         'no-multi-spaces': 'off',
         'key-spacing': ["error", { mode: "minimum" }],
         "no-console": 'off',
+        'selector-anb-no-unmatchable': 'off',
+        'operator-linebreak': 'off',
     }
 }

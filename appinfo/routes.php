@@ -22,13 +22,10 @@
  *
  */
 
-return [
-    'routes' => [
-        ['name' => 'config#setConfig',          'url' => '/config',                 'verb' => 'PUT'],
-        ['name' => 'config#setServerAddress',   'url' => '/server-address-config',  'verb' => 'PUT'],
-        ['name' => 'config#setParameterLevel',  'url' => '/parameter-level-config', 'verb' => 'PUT'],
-        ['name' => 'config#setActiveModel',     'url' => '/activate-model',         'verb' => 'PUT'],
-        ['name' => 'config#getServerModels',    'url' => '/server-models',          'verb' => 'GET'],
-        ['name' => 'config#getModelSettings',   'url' => '/model-settings',         'verb' => 'GET'],
-    ]
-];
+return array_merge_recursive(
+    include(__DIR__ . '/routes/routesLLaMa.php'),
+    include(__DIR__ . '/routes/routesSettings.php'),
+    include(__DIR__ . '/routes/routesRooms.php'),
+    include(__DIR__ . '/routes/routesUsers.php'),
+    include(__DIR__ . '/routes/routesMsg.php'),
+);

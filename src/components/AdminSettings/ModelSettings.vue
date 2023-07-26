@@ -160,11 +160,12 @@ import NumericIcon from 'vue-material-design-icons/Numeric.vue'
 
 import axios from '@nextcloud/axios'
 
+import { delay } from '../../utils/timer.js'
 import { generateUrl } from '@nextcloud/router'
-import { delay, GenRandomId } from '../../utils.js'
+import { GenRandomId } from '../../utils/utils.js'
 import { mapState, mapActions } from 'pinia'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { globalStore, EngineConst } from '../../globalStore.js'
+import { globalStore, EngineConst } from '../../utils/settings.js'
 
 import { NcCheckboxRadioSwitch, NcTextField, NcSelect } from '@nextcloud/vue'
 import { loadState } from '@nextcloud/initial-state'
@@ -177,7 +178,7 @@ const selectDict = {
         value: 'ram',
 	      options: [
 	        'ram',
-		      'disk',
+	        'disk',
 	      ],
     },
   },
@@ -216,8 +217,7 @@ export default {
 
     mounted() {
       console.log('ModelSettings::mounted')
-      this.gStore.$onAction(this.callbackAction)
-      // this.checkCacheSettings(this.settings.find(elem => elem.id === 'n_cache'))
+      this.gStore.$onAction(this.gStoreCallbackAction)
     },
 
     methods: {
@@ -299,13 +299,13 @@ export default {
         }, 2000)()
       },
 
-      saveOptions(values) {
+      async saveOptions(values) {
         // console.log('ModelSettings::saveOptions: ', values)
         const req = {
           values,
         }
         const url = generateUrl('/apps/llamavirtualuser/parameter-level-config')
-        axios.put(url, req).then((response) => {
+        await axios.put(url, req).then((response) => {
           // console.log(response)
           showSuccess(t('llamavirtualuser', 'LLaMa parameter options saved'))
         }).catch((error) => {
@@ -319,8 +319,8 @@ export default {
       // ***********************************************************************
       // ***********************************************************************
 
-      callbackAction(value) {
-        // console.log('ModelSettings::callbackAction', value)
+      gStoreCallbackAction(value) {
+        // console.log('ModelSettings::gStoreCallbackAction', value)
         if (value.name === 'server_connected') {
           this.getSettings()
         } else if (value.name === 'model_set') {
@@ -334,10 +334,10 @@ export default {
       },
       // ***********************************************************************
 
-      getSettings() {
+      async getSettings() {
         // console.log('ModelSettings::saveOptions')
         const url = generateUrl('/apps/llamavirtualuser/model-settings')
-        axios.get(url).then((response) => {
+        await axios.get(url).then((response) => {
           // console.log(response.data)
           this.settings = response.data
         }).catch((error) => {

@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
-import Vue from 'vue'
 import './bootstrap.js'
 
+import Vue from 'vue'
 import AdminSettings from './views/AdminSettings.vue'
 import { createPinia, PiniaVuePlugin } from 'pinia'
 
@@ -12,7 +12,7 @@ Vue.use(PiniaVuePlugin)
 const pinia = createPinia()
 
 // eslint-disable-next-line
-new Vue({
+export default new Vue({
     el:     '#llama_admin',
     render: h => h(AdminSettings),
     pinia,

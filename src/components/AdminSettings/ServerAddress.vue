@@ -78,10 +78,11 @@ import KeyIcon from 'vue-material-design-icons/Key.vue'
 import { NcTextField } from '@nextcloud/vue'
 import axios   from '@nextcloud/axios'
 
-import { delay } from '../../utils.js'
 import { loadState } from '@nextcloud/initial-state'
-import { globalStore } from '../../globalStore.js'
 import { generateUrl } from '@nextcloud/router'
+
+import { delay } from '../../utils/timer.js'
+import { globalStore } from '../../utils/settings.js'
 import { mapState, mapActions } from 'pinia'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 
@@ -115,11 +116,13 @@ export default {
     mounted() {
       console.log('ServerAddress::mounted')
       this.server_set(this.state.server_connected)
+      this.engine_set(this.state.engine_connected[0])
     },
 
     methods: {
 
       ...mapActions(globalStore, ['server_set']),
+      ...mapActions(globalStore, ['engine_set']),
 
       ...mapActions(globalStore, ['engine_error']),
       ...mapActions(globalStore, ['engine_active']),
@@ -175,37 +178,25 @@ export default {
       },
 
       // save options
-      saveOptions(values) {
+      async saveOptions(values) {
         // console.log('ServerAddress::saveOptions')
-        this.checkConnect(values)
+        await this.saveServerOptions(values)
+        await this.checkServerConnection(values)
       },
 
       // check connection
-      checkConnect(values) {
-        // console.log('ServerAddress::checkConnect')
+      async saveServerOptions(values) {
+        // console.log('ServerAddress::saveServerOptions')
         const req = {
          values,
         }
         // setup url & ServerStatus
         const url = generateUrl('/apps/llamavirtualuser/server-address-config')
-        this.server_connecting()
-        this.engine_error()
         // call route admin-config
-        axios.put(url, req).then((response) => {
+        await axios.put(url, req).then((response) => {
           // console.log(response)
-          switch (response.data.connected) {
-            case 0 :
-              this.server_error()
-              this.engine_error()
-            break
-            case 2 :
-              this.server_connected()
-            break
-          }
           showSuccess(t('llamavirtualuser', 'LLaMa server options saved'))
         }).catch((error) => {
-          this.server_error()
-          this.engine_error()
           showError(
             t('llamavirtualuser', 'Failed to save LLaMa server options')
             + ': ' + (error.response?.request?.responseText ?? '')
@@ -213,6 +204,39 @@ export default {
           console.error(error)
         })
       },
+
+      // check connection
+      async checkServerConnection(values) {
+        // console.log('ServerAddress::checkServerConnect')
+        // setup url & ServerStatus
+        const url = generateUrl('/apps/llamavirtualuser/server-status')
+        this.server_connecting()
+        // call route admin-config
+        await axios.get(url).then((response) => {
+          // console.log(response)
+          switch (response.data.connected) {
+            case 0 :
+              this.server_error()
+              this.engine_error()
+              showError(t('llamavirtualuser', 'Connection to LLaMa server: Failed'))
+            break
+            case 2 :
+              this.server_connected()
+              showSuccess(t('llamavirtualuser', 'Connection to LLaMa server: Ok'))
+            break
+          }
+        }).catch((error) => {
+          this.server_error()
+          this.engine_error()
+          // this.update_timer.pause()
+          showError(
+            t('llamavirtualuser', 'Connection to LLaMa server: Failed')
+            + ': ' + (error.response?.request?.responseText ?? '')
+          )
+          console.error(error)
+        })
+      },
+
     },
 }
 </script>
