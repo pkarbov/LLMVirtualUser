@@ -32,74 +32,85 @@ use OCP\IConfig;
 use OCP\Settings\ISettings;
 
 use OCA\LLaMaVirtualUser\AppInfo\Application;
-use OCA\LLaMaVirtualUser\Service\APIService;
+use OCA\LLaMaVirtualUser\Service\SettingsService;
 
 class Personal implements ISettings {
 
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var IInitialState
-	 */
-	private $initialStateService;
-	/**
-	 * @var string|null
-	 */
-	private $userId;
-	/**
-	 * @var llamaAPIService
-	 */
-	private $apiService;
+    /**
+     * @var IConfig
+     */
+    private $config;
+    /**
+     * @var IInitialState
+     */
+    private $initialStateService;
+    /**
+     * @var string|null
+     */
+    private $userId;
+    /**
+     * @var llamaAPIService
+     */
+    private $apiService;
 
-	public function __construct(IConfig $config,
-								IInitialState $initialStateService,
-								APIService $apiService,
-								?string $userId) {
-		$this->config = $config;
-		$this->initialStateService = $initialStateService;
-		$this->userId = $userId;
-		$this->apiService = $apiService;
-	}
+    public function __construct(IConfig $config,
+                                IInitialState $initialStateService,
+                                SettingsService $apiService,
+                                ?string $userId) {
+        $this->config = $config;
+        $this->initialStateService = $initialStateService;
+        $this->userId = $userId;
+        $this->apiService = $apiService;
+    }
 
-	/**
-	 * @return TemplateResponse
-	 */
-	public function getForm(): TemplateResponse {
-		$token = $this->config->getUserValue($this->userId, Application::APP_ID, 'token');
-		$llamaUserId = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_id');
-		$llamaUserName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_name');
-		$searchPagesEnabled = $this->config->getUserValue($this->userId, Application::APP_ID, 'search_pages_enabled', '0');
-		$searchDatabasesEnabled = $this->config->getUserValue($this->userId, Application::APP_ID, 'search_databases_enabled', '0');
-		$linkPreviewEnabled = $this->config->getUserValue($this->userId, Application::APP_ID, 'link_preview_enabled', '0');
+    /**
+     * @return TemplateResponse
+     */
+    public function getForm(): TemplateResponse {
+        $this->initServerSettings();
+        $this->initRequestSettings();
 
-		// for OAuth
-		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
-		// don't expose the client secret to users
-		$clientSecret = ($this->config->getAppValue(Application::APP_ID, 'client_secret') !== '');
-		$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0') === '1';
+        return new TemplateResponse(Application::APP_ID, 'personalSettings');
+    }
 
-		$userConfig = [
-			'token' => $token ? 'dummyTokenContent' : '',
-			'client_id' => $clientID,
-			'client_secret' => $clientSecret,
-			'use_popup' => $usePopup,
-			'user_id' => $llamaUserId,
-			'user_name' => $llamaUserName,
-			'search_pages_enabled' => $searchPagesEnabled === '1',
-			'search_databases_enabled' => $searchDatabasesEnabled === '1',
-			'link_preview_enabled' => $linkPreviewEnabled === '1',
-		];
-		$this->initialStateService->provideInitialState('user-config', $userConfig);
-		return new TemplateResponse(Application::APP_ID, 'personalSettings');
-	}
+    /**
+     * initServerSettings
+     *
+     * @return void
+     */
+    protected function initServerSettings(): void {
 
-	public function getSection(): string {
-		return 'llama-config';
-	}
+        $serverAddress   = $this->config->getAppValue(Application::APP_ID, 'server_address');
+        $serverSecret    = $this->config->getAppValue(Application::APP_ID, 'server_secret');
+        $serverConnected = $this->apiService->checkServerConnection($this->config);
+        $engineConnected = $this->apiService->checkEngineConnection($this->config);
 
-	public function getPriority(): int {
-		return 10;
-	}
+        $adminConfig = [
+            'server_address'   => $serverAddress,
+            'server_secret'    => $serverSecret,
+            'server_connected' => $serverConnected,
+            'engine_connected' => $engineConnected,
+        ];
+        $this->initialStateService->provideInitialState('server-config', $adminConfig);
+    }
+
+    /**
+     * initRequestSettings
+     *
+     * @return void
+     */
+    protected function initRequestSettings(): void {
+
+        $requestSettings = $this->apiService->getRequestSettings($this->config);
+        $this->initialStateService->provideInitialState('request-settings', $requestSettings);
+    }
+
+    public function getSection(): string {
+        return 'llama-config';
+    }
+
+    public function getPriority(): int {
+        return 10;
+    }
+
 }

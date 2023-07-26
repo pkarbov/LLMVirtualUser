@@ -31,98 +31,102 @@ use OCP\Settings\ISettings;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 
-use OCA\LLaMaVirtualUser\Service\APIService;
-use OCA\LLaMaVirtualUser\Service\Logger;
+use OCA\LLaMaVirtualUser\Service\SettingsService;
+use OCA\LLaMaVirtualUser\Logger\Logger;
 
 use OCA\LLaMaVirtualUser\AppInfo\Application;
 
 class Admin implements ISettings {
 
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var IInitialState
-	 */
-	private $initialStateService;
-	/**
-	 * @var NotionAPIService
-	 */
-	private $apiService;
-	/**
-	* @var LLaMaLogger
-	*/
-	protected $logger;
+    /**
+     * @var IConfig
+     */
+    private $config;
+    /**
+     * @var IInitialState
+     */
+    private $initialStateService;
+    /**
+     * @var NotionAPIService
+     */
+    private $apiService;
+    /**
+    * @var LLaMaLogger
+    */
+    protected $logger;
 
 
-	public function __construct(IConfig $config,
-								Logger $logger,
-								APIService $apiService,
-								IInitialState $initialStateService) {
-		$this->config = $config;
-		$this->logger = $logger;
-		$this->apiService     = $apiService;
-		$this->initialStateService = $initialStateService;
-	}
+    public function __construct(IConfig $config,
+                                Logger $logger,
+                                SettingsService $apiService,
+                                IInitialState $initialStateService) {
+        $this->config = $config;
+        $this->logger = $logger;
+        $this->apiService     = $apiService;
+        $this->initialStateService = $initialStateService;
+    }
 
-	/**
-	 * @return TemplateResponse
-	 */
-	public function getForm(): TemplateResponse {
-	    $this->initServerSettings();
-	    $this->initParameterLevel();
-	    $this->initModelSettings();
-	    $this->initServerModels();
-	
-		return new TemplateResponse(Application::APP_ID, 'adminSettings');
-	}
+    /**
+     * @return TemplateResponse
+     */
+    public function getForm(): TemplateResponse {
+        $this->initServerSettings();
+        $this->initParameterLevel();
+        $this->initModelSettings();
+        $this->initServerModels();
 
-	/**
-	 * initServerSettings
-	 *
-	 * @return void
-	 */
-	protected function initServerSettings(): void {
-	
+        return new TemplateResponse(Application::APP_ID, 'adminSettings');
+    }
+
+    /**
+     * initServerSettings
+     *
+     * @return void
+     */
+    protected function initServerSettings(): void {
+
         $serverAddress   = $this->config->getAppValue(Application::APP_ID, 'server_address');
         $serverSecret    = $this->config->getAppValue(Application::APP_ID, 'server_secret');
-        $serverConnected = $this->apiService->getConnectedStatus($this->config);
+        $serverConnected = $this->apiService->checkServerConnection($this->config);
+        $engineConnected = $this->apiService->checkEngineConnection($this->config);
 
         $adminConfig = [
             'server_address'   => $serverAddress,
             'server_secret'    => $serverSecret,
             'server_connected' => $serverConnected,
+            'engine_connected' => $engineConnected,
         ];
         $this->initialStateService->provideInitialState('server-config', $adminConfig);
     }
-	/**
-	 * initServerModels
-	 *
-	 * @return void
-	 */
-	protected function initServerModels(): void {
+    /**
+     * initServerModels
+     *
+     * @return void
+     */
+    protected function initServerModels(): void {
 
         $modelConfig = $this->apiService->getServerModels($this->config);
         $this->initialStateService->provideInitialState('server-models', $modelConfig);
     }
-	/**
-	 * initModelSettings
-	 *
-	 * @return void
-	 */
-	protected function initModelSettings(): void {
+
+    /**
+     * initModelSettings
+     *
+     * @return void
+     */
+    protected function initModelSettings(): void {
 
         $modelSettings = $this->apiService->getModelSettings($this->config);
         $this->initialStateService->provideInitialState('model-settings', $modelSettings);
     }
-	/**
-	 * initParameterLevel
-	 *
-	 * @return void
-	 */
-	protected function initParameterLevel(): void {
-	
+
+    /**
+     * initParameterLevel
+     *
+     * @return void
+     */
+    protected function initParameterLevel(): void {
+
         $parameterLevel   = $this->config->getAppValue(Application::APP_ID, 'level');
         $parameterConfig = [
             'level'   => ($parameterLevel == '' ? '0' : $parameterLevel),

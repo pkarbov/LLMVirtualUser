@@ -21,6 +21,7 @@ const appId = 'llamavirtualuser'
 webpackConfig.entry = {
     personalSettings: { import: path.join(__dirname, 'src', 'personalSettings.js'), filename: appId + '-personalSettings.js' },
     adminSettings:    { import: path.join(__dirname, 'src', 'adminSettings.js'),    filename: appId + '-adminSettings.js' },
+    mainApp:          { import: path.join(__dirname, 'src', 'main.js'),             filename: appId + '-main.js' },
 }
 
 webpackConfig.plugins.push(

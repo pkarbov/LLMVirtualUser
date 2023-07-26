@@ -26,8 +26,6 @@ declare(strict_types=1);
 
 namespace OCA\LLaMaVirtualUser\Command;
 
-use OCA\LLaMaVirtualUser\Service\Service;
-
 use Exception;
 
 use Symfony\Component\Console\Command\Command;
@@ -35,12 +33,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class LLaMaConnect extends Command {
-    private LLaMaService $downloader;
+class Connect extends Command {
 
-    public function __construct(Service $downloader) {
+    public function __construct() {
         parent::__construct();
-        $this->downloader = $downloader;
     }
 
     /**
@@ -63,7 +59,7 @@ class LLaMaConnect extends Command {
      */
     protected function execute(InputInterface $input, OutputInterface $output): int {
         try {
-            $this->downloader->completions(true);
+            // $this->downloader->completions(true);
         } catch (\Exception $ex) {
             $output->writeln('<error>Failed to download models</error>');
             $output->writeln($ex->getMessage());

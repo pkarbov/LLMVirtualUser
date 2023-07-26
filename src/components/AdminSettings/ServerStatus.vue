@@ -59,11 +59,11 @@
 
 <script>
 
-import LLaMaIcon from '../icons/LLaMaIcon.vue'
+import LLaMaIcon from '../../icons/LLaMaIcon.vue'
 
 import { mapState } from 'pinia'
 import { NcNoteCard } from '@nextcloud/vue'
-import { globalStore } from '../../globalStore.js'
+import { globalStore } from '../../utils/settings.js'
 
 export default {
     name: 'ServerStatus',
