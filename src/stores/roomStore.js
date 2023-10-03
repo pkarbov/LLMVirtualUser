@@ -15,9 +15,9 @@ export const useRoomStore = defineStore('roomStore', {
         // *********************************************************************
         // rooms
         roomsQuery: (state) => {
-            return (userId, roomsPerPage, startRooms) => {
-                // console.log('chatRoomService::roomsQuery()', userId, roomsPerPage, startRooms)
-                return { userId, roomsPerPage, startRooms }
+            return (userId, roomsPerPage, startRoom) => {
+                // console.log('chatRoomService::roomsQuery()', userId, roomsPerPage, startRoom)
+                return { userId, roomsPerPage, startRoom }
             }
 	    },
         // *********************************************************************

@@ -1,17 +1,16 @@
 <template>
-	<div id="llama-chat-app" class="app-chat">
+    <div id="llama-chat-app" class="app-chat">
     <ChatContainer1
       v-if="showChat"
-			:theme="theme"
-      :is-device="isDevice"
-      :add-test-data="addTestData" />
+      :theme="theme"
+      :is-device="isDevice" />
   </div>
 </template>
 
 <script>
 
 import { loadState } from '@nextcloud/initial-state'
-import { getCurrentUser } from '@nextcloud/auth'
+// import { getCurrentUser } from '@nextcloud/auth'
 
 import { useRoomStore } from '../../stores/roomStore.js'
 import { getRndInteger, getRandomArray } from '../../utils/random.js'
@@ -38,54 +37,53 @@ export default {
       theme: 'dark',
       showChat: true,
 
-	    isDevice: false,
+      isDevice: false,
       updatingData: false,
       showDemoOptions: true,
 
-	    users: [],
+      users: [],
       llamaUser: {},
       currentUser: {},
     }
   },
 
   computed: {
-	  showOptions() {
-	    return !this.isDevice || this.showDemoOptions
-	  },
-	},
+      showOptions() {
+        return !this.isDevice || this.showDemoOptions
+      },
+    },
 
-	watch: {
-	  currentUserId() {
-		  this.showChat = false
-		  setTimeout(() => (this.showChat = true), 150)
-		},
-	},
+    watch: {
+      currentUserId() {
+          this.showChat = false
+          setTimeout(() => (this.showChat = true), 150)
+        },
+    },
 
-	  mounted() {
-	    console.log('ChatView1::mounted()')
-	    console.log('ChatView1::mounted::getCurrentUser()', getCurrentUser())
+    mounted() {
+      console.log('ChatView1::mounted()')
 
-	    this.users = this.state.test_users
+      this.users = this.state.test_users
       this.llamaUser = this.state.llama_user
       this.currentUser = this.state.current_user
 
-	    // console.log('ChatView1::mounted::users()', this.users)
-	    // console.log('ChatView1::mounted::llamaUser()', this.llamaUser)
-	    // console.log('ChatView1::mounted::currentUser()', this.currentUser)
+      // console.log('ChatView1::mounted::users()', this.users)
+      // console.log('ChatView1::mounted::llamaUser()', this.llamaUser)
+      // console.log('ChatView1::mounted::currentUser()', this.currentUser)
 
-		  this.isDevice = (window.innerWidth < 500)
-		  window.addEventListener('resize', ev => {
-			  if (ev.isTrusted) this.isDevice = (window.innerWidth < 500)
-		  })
-	  },
+      this.isDevice = (window.innerWidth < 500)
+        window.addEventListener('resize', ev => {
+          if (ev.isTrusted) this.isDevice = (window.innerWidth < 500)
+        })
+      },
 
-	  methods: {
+    methods: {
 // /////////////////////////////////////////////////////////////////////////////
-		  async addTestData() {
-		    console.log('ChatView1::addTestData()')
+      async addTestData() {
+        console.log('ChatView1::addTestData()')
 
-		    this.addNewRoom = false
-			  this.updatingData = true
+        this.addNewRoom = false
+        this.updatingData = true
 
         this.users = [this.state.current_user, this.state.llama_user, ...this.users]
         // create random rooms
@@ -95,19 +93,19 @@ export default {
           const array2 = getRandomArray(min, this.users.length - 1)
           const array3 = array2.map(i => this.users[i])
           // console.log('ChatView1::addTestData', min, array2, array3, this.users)
-			    await this.gRoomStore.addRoom({
-				    users: array3,
-				    lastUpdated: new Date(),
-			    })
+          await this.gRoomStore.addRoom({
+              users: array3,
+              lastUpdated: new Date(),
+            })
         }
 
-			  this.updatingData = false
-			  location.reload()
-		  },
+        this.updatingData = false
+        location.reload()
+      },
 // /////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
 
-	  },
+      },
 
 }
 </script>

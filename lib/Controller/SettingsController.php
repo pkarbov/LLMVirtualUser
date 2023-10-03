@@ -93,7 +93,7 @@ class SettingsController extends Controller {
         $this->urlGenerator = $urlGenerator;
         $this->initialStateService = $initialStateService;
 
-        // $this->logger->info('ConfigController::__construct');
+        $this->logger->info('SettingsController::__construct');
     }
 
     /**
@@ -101,7 +101,7 @@ class SettingsController extends Controller {
      * @NoCSRFRequired
      */
     public function index(): TemplateResponse {
-        $this->logger->info('ConfigController::index()');
+        $this->logger->info('SettingsController::index()');
         return new TemplateResponse(Application::APP_ID, 'main');
     }
 
@@ -113,7 +113,7 @@ class SettingsController extends Controller {
      * @return DataResponse
      */
     public function setConfig(array $values): DataResponse {
-        // $this->logger->info('ConfigController::setConfig');
+        // $this->logger->info('SettingsController::setConfig');
         $result = [];
         return new DataResponse($result);
     }
@@ -125,7 +125,7 @@ class SettingsController extends Controller {
      * @return DataResponse
      */
     public function setServerAddress(array $values): DataResponse {
-        // $this->logger->info('ConfigController::setServerAddress');
+        // $this->logger->info('SettingsController::setServerAddress');
         foreach ($values as $key => $value) {
             $this->config->setAppValue(Application::APP_ID, $key, $value);
             // $this->logger->info(sprintf('setServerAddress(): [%s => %s] ',$key, $value));
@@ -140,7 +140,7 @@ class SettingsController extends Controller {
      * @return DataResponse
      */
     public function setParameterLevel(array $values): DataResponse {
-        // $this->logger->info('ConfigController::setParameterLevel');
+        // $this->logger->info('SettingsController::setParameterLevel');
         foreach ($values as $key => $value) {
             $this->config->setAppValue(Application::APP_ID, $key, $value);
             // $this->logger->info(sprintf('setParameterLevel(): [%s => %s] ',$key, $value));
@@ -155,7 +155,7 @@ class SettingsController extends Controller {
      * @return DataResponse
      */
     public function setActiveModel(array $values): DataResponse {
-        // $this->logger->info(sprintf('ConfigController::setActiveModel: %s', json_encode($values, JSON_PRETTY_PRINT)));
+        // $this->logger->info(sprintf('SettingsController::setActiveModel: %s', json_encode($values, JSON_PRETTY_PRINT)));
 
         $model = $values['model'];
         $param = $values['param'];
@@ -170,7 +170,7 @@ class SettingsController extends Controller {
      * @return DataResponse
      */
     public function getServerStatus(): DataResponse {
-        // $this->logger->info('ConfigController::getServerStatus');
+        // $this->logger->info('SettingsController::getServerStatus');
         $status = $this->apiService->checkServerConnection($this->config);
         return new DataResponse(['connected' => $status]);
     }
@@ -182,7 +182,7 @@ class SettingsController extends Controller {
      * @return DataResponse
      */
     public function getEngineStatus(): DataResponse {
-        // $this->logger->info('ConfigController::getEngineStatus');
+        // $this->logger->info('SettingsController::getEngineStatus');
         $status = $this->apiService->checkEngineConnection($this->config);
         return new DataResponse(['connected' => $status]);
     }
@@ -194,7 +194,7 @@ class SettingsController extends Controller {
      * @return DataResponse
      */
     public function getServerModels(): DataResponse {
-        // $this->logger->info('ConfigController::getServerModels');
+        // $this->logger->info('SettingsController::getServerModels');
         $serverModels = $this->apiService->getServerModels($this->config);
         return new DataResponse($serverModels);
     }
@@ -206,7 +206,7 @@ class SettingsController extends Controller {
      * @return DataResponse
      */
     public function getModelSettings(): DataResponse {
-        // $this->logger->info('ConfigController::getModelSettings');
+        // $this->logger->info('SettingsController::getModelSettings');
         $modelSettings = $this->apiService->getModelSettings($this->config);
         return new DataResponse($modelSettings);
     }

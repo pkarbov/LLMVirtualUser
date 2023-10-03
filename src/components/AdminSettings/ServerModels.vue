@@ -228,12 +228,11 @@ export default {
       // check connection
       async checkEngineConnection() {
         console.log('ServerAddress::checkEngineConnection')
-        // this.update_timer = new Timer(this.checkConnection)
         const url = generateUrl('/apps/llamavirtualuser/engine-status')
         // call route admin-config
         await axios.get(url).then((response) => {
           // console.log(response)
-          this.update_timer = new Timer(this.checkEngineConnection)
+          this.update_timer.resume(this.checkEngineConnection)
           switch (response.data.connected[0]) {
             case 0 :
               this.engine_error()
@@ -243,9 +242,8 @@ export default {
             break
           }
         }).catch((error) => {
-          this.update_timer = new Timer(this.checkEngineConnection)
+          this.update_timer.resume(this.checkEngineConnection)
           this.engine_error()
-          // this.update_timer.pause()
           console.error(error)
         })
       },

@@ -33,6 +33,7 @@ use OCP\Settings\ISettings;
 
 use OCA\LLaMaVirtualUser\AppInfo\Application;
 use OCA\LLaMaVirtualUser\Service\SettingsService;
+use OCA\LLaMaVirtualUser\Logger\Logger;
 
 class Personal implements ISettings {
 
@@ -58,9 +59,10 @@ class Personal implements ISettings {
                                 SettingsService $apiService,
                                 ?string $userId) {
         $this->config = $config;
-        $this->initialStateService = $initialStateService;
         $this->userId = $userId;
         $this->apiService = $apiService;
+        $this->initialStateService = $initialStateService;
+
     }
 
     /**
@@ -106,7 +108,7 @@ class Personal implements ISettings {
     }
 
     public function getSection(): string {
-        return 'llama-config';
+        return 'llama';
     }
 
     public function getPriority(): int {

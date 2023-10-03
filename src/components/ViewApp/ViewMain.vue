@@ -246,8 +246,8 @@ export default {
    *
    * @param {object} note Note object
    */
-		async deleteNote(note) {
-			try {
+	async deleteNote(note) {
+	try {
         console.log('ViewMain::deleteNote()', note)
 				await axios.delete(generateUrl(`/apps/llmvirtualuser/notes/${note.id}`))
 				this.notes.splice(this.notes.indexOf(note), 1)

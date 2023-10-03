@@ -25,7 +25,19 @@
 return [
     'routes' => [
 
-        ['name' => 'message#last',    'url' => '/msg-last',    'verb' => 'GET'],
+        ['name' => 'message#getNewestMessages', 'url' => '/msg-last',   'verb' => 'PUT'],
+        ['name' => 'message#getRoomMessages',   'url' => '/msg-get',    'verb' => 'PUT'],
+        ['name' => 'message#addRoomMessage',    'url' => '/msg-send',   'verb' => 'PUT'],
+        ['name' => 'message#updateRoomMessage', 'url' => '/msg-update', 'verb' => 'PUT'],
 
+        ['name' => 'message#updateMessageSeen',     'url' => '/msg-seen',   'verb' => 'PUT'],
+        ['name' => 'message#updateMessageReaction', 'url' => '/msg-react',  'verb' => 'PUT'],
+
+        ['name' => 'message#addFileData',    'url' => '/msg-file',        'verb' => 'PUT'],
+        ['name' => 'message#updateFileInfo', 'url' => '/msg-file-update', 'verb' => 'PUT'],
+        ['name' => 'message#testCompletion', 'url' => '/msg-test-comp',   'verb' => 'PUT'],
+
+        ['name' => 'message#deleteMessage',  'url' => '/msg-del',         'verb' => 'PUT'],
+        ['name' => 'message#deleteFileData', 'url' => '/msg-file-del',    'verb' => 'PUT'],
     ],
 ];

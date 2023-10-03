@@ -34,4 +34,5 @@ class RoomMapper extends QBMapper {
                     ->where($qb->expr()->eq('id', $qb->createNamedParameter($id)));
         return $this->findEntity($qb);
     }
+
 }

@@ -45,19 +45,25 @@ class Room extends Entity implements JsonSerializable {
     }
 
     public function jsonSerialize(): array {
-        $test = (object) [];
-        $test->seconds      = $this->lastUpdated->getTimestamp();
-        $test->nanoseconds  = 0;
 
-        $res = [
-            'id'          => $this->id,
-            'lastUpdated' => $test,
-        ];
+        if (!is_null($this->id)) {
+            $res['id']   = $this->id;
+        };
+
+        if (!is_null($this->lastUpdated)) {
+            $test1 = new \stdClass();
+            $test1->seconds     = $this->lastUpdated->getTimestamp();
+            $test1->nanoseconds = 0;
+            $res['lastUpdated'] = $test1;
+        };
 
         if (property_exists($this, 'users')) {
-            $res['typingUsers'] = $this->typingUsers;
             $res['users']       = $this->users;
-        }
+        };
+
+        if (property_exists($this, 'typingUsers')) {
+            $res['typingUsers'] = $this->typingUsers;
+        };
 
         return $res; 
     }

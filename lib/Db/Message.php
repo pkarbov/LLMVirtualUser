@@ -38,7 +38,11 @@ class Message extends Entity implements JsonSerializable {
 
     /** @var int */
     protected $idParent;
-    /** @var int */ 
+    /** @var int */
+    protected $idUser;
+    /** @var int */
+    protected $idRoom;
+    /** @var string */
     protected $idRoomUser;
     /** @var string */
     protected $content;
@@ -49,33 +53,96 @@ class Message extends Entity implements JsonSerializable {
     /** @var datetime */
     protected $timestampEnd;
     /** @var datetime */
-    protected $seen;
-    /** @var datetime */
     protected $deleted;
+    /** @var array */
+    protected $reactions;
+    /** @var array */
+    protected $seens;
+    /** @var array */
+    public $files;
 
     public function __construct() {
         ////////////////////////////////
         $this->addType('idParent',   'int');
+        $this->addType('idRoom',     'int');
+        $this->addType('idUser',     'int');
         $this->addType('idRoomUser', 'int');
         $this->addType('content',    'string');
         $this->addType('contentBin', 'string');
-        $this->addType('seen',       'datetime');
         $this->addType('deleted',    'datetime');
         $this->addType('timestampStart', 'datetime');
         $this->addType('timestampEnd',   'datetime');
     }
 
     public function jsonSerialize(): array {
-        $test = (object) [];
-        $test->seconds      = $this->timestamp->timestampEnd();
-        $test->nanoseconds  = 0;
-        $res = [
-            'id'        => $this->id,
-            'sender_id' => $this->idUser,
-            'content'   => $this->content,
-            'timestamp' => $test,
-        ];
-        
+        $test1 = (object) [];
+        $react = [];
+        $seens = [];
+        $files = [];
+        $res = [];
+
+        if (!is_null($this->id)) {
+            $res['id']   = $this->id;
+        };
+        if (!is_null($this->idUser)) {
+            $res['idUser']   = $this->idUser;
+        };
+        if (!is_null($this->idRoom)) {
+            $res['idRoom']   = $this->idRoom;
+        };
+        if (!is_null($this->idParent)) {
+            $res['idParent']   = $this->idParent;
+        };
+        if (!is_null($this->idRoomUser)) {
+            $res['idSender']   = $this->idRoomUser;
+        };
+        if (!is_null($this->content)) {
+            $res['content']   = $this->content;
+        };
+
+        if (!is_null($this->timestampEnd)) {
+            $test1 = new \stdClass();
+            $test1->seconds     = $this->timestampEnd->getTimestamp();
+            $test1->nanoseconds = 0;
+            $res['timestamp']   = $test1;
+        };
+
+        if (!is_null($this->seens)) {
+            foreach($this->seens as $rct) {
+                $id = $rct->getIdUser();
+
+                $test1 = new \stdClass();
+                $test1->seconds     = $rct->getSeen()->getTimestamp();
+                $test1->nanoseconds = 0;
+                $seens[$id] = $test1;
+
+            }
+            $res['seen']   = $seens;
+        };
+
+        if (!is_null($this->reactions)) {
+            foreach($this->reactions as $rct) {
+                $id = (string)$rct->getIdUser();
+                if(array_key_exists($rct->getReaction(), $react)){
+                    $react[$rct->getReaction()][] = $id;
+                }else{
+                    $react[$rct->getReaction()] = [$id];
+                }
+            }
+            $res['reactions']   = $react;
+        };
+
+        if (!is_null($this->deleted)) {
+            $test1 = new \stdClass();
+            $test1->seconds     = $this->deleted->getTimestamp();
+            $test1->nanoseconds = 0;
+            $res['deleted'] = true;
+        };
+
+        if (!is_null($this->files)) {
+            $res['files']   = $this->files;
+        };
+
         return $res;
     }
 

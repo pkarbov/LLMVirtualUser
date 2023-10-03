@@ -50,20 +50,15 @@ class Admin implements ISettings {
      * @var NotionAPIService
      */
     private $apiService;
-    /**
-    * @var LLaMaLogger
-    */
-    protected $logger;
 
 
     public function __construct(IConfig $config,
-                                Logger $logger,
                                 SettingsService $apiService,
                                 IInitialState $initialStateService) {
         $this->config = $config;
-        $this->logger = $logger;
         $this->apiService     = $apiService;
         $this->initialStateService = $initialStateService;
+
     }
 
     /**
@@ -135,7 +130,7 @@ class Admin implements ISettings {
     }
 
     public function getSection(): string {
-        return 'llama-config';
+        return 'llama';
     }
 
     public function getPriority(): int {

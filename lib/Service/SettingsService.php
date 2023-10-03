@@ -34,6 +34,7 @@ use OCP\Http\Client\IClientService;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCA\LLaMaVirtualUser\AppInfo\Application;
+use OCA\LLaMaVirtualUser\Logger\Logger;
 
 class SettingsService {
     /**

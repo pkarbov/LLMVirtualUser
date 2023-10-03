@@ -14,7 +14,7 @@ export const parseTimestamp = (timestamp, format = '') => {
     if (!timestamp) return
 
     const date = timestamp.seconds
-       ? new Date(timestamp.seconds * 1000)
+       ? new Date((timestamp.seconds) * 1000)
        : timestamp
 
     if (format === 'HH:mm') {
@@ -37,4 +37,19 @@ export const formatTimestamp = (date, timestamp) => {
     const timestampFormat = isSameDay(date, new Date()) ? 'HH:mm' : 'DD/MM/YY'
     const result = parseTimestamp(timestamp, timestampFormat)
     return timestampFormat === 'HH:mm' ? `Today, ${result}` : result
+}
+
+/***********************************************************************
+ * Update message timezone
+ *
+ * @param {message} Object Message
+ *
+ * @return {messsage} Object
+ */
+export const updateDBTimezone = (seconds) => {
+    const dateOff = new Date()
+    const offset = dateOff.getTimezoneOffset()
+
+    seconds -= (offset * 60)
+    return seconds
 }

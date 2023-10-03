@@ -8,13 +8,13 @@ export function Timer(callback, mydelay = 5000) {
         remaining -= new Date() - start
     }
 
-    this.resume = function() {
+    this.resume = function(callback) {
         start = new Date()
         window.clearTimeout(timerId)
         timerId = window.setTimeout(callback, remaining)
     }
 
-    this.resume()
+    this.resume(callback)
 }
 
 let mytimer = 0

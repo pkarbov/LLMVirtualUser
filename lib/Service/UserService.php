@@ -138,7 +138,7 @@ class UserService {
 
             $userDB = $this->user_db->insert($userDB);
         }
-        $this->logger->info(sprintf('UserService::getCreateUser %s', json_encode($userDB, JSON_PRETTY_PRINT)));
+        // $this->logger->info(sprintf('UserService::findCreateUser %s', json_encode($userDB, JSON_PRETTY_PRINT)));
         return $userDB;
     }
 

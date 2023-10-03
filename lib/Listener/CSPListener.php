@@ -45,9 +45,9 @@ class CSPListener implements IEventListener {
             return;
         }
 
-        //$this->logger->info(sprintf('CSPListener::event %s', json_encode($event, JSON_PRETTY_PRINT)));
+        $this->logger->info(sprintf('CSPListener::event %s', json_encode($event, JSON_PRETTY_PRINT)));
 
-        //$csp = new ContentSecurityPolicy();
+        $csp = new ContentSecurityPolicy();
         //$csp->addAllowedMediaDomain('blob:');
         //$csp->addAllowedWorkerSrcDomain('blob:');
         //$csp->addAllowedWorkerSrcDomain("'self'");
@@ -61,6 +61,6 @@ class CSPListener implements IEventListener {
         //$csp->addAllowedScriptDomain('https://test-88585-default-rtdb.firebaseio.com/*');
         //$csp->addAllowedConnectDomain('https://firestore.googleapis.com/*');
 
-        //$event->addPolicy($csp);
+        $event->addPolicy($csp);
     }
 }

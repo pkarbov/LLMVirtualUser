@@ -27,6 +27,7 @@ return [
 
         ['name' => 'room#find',   'url' => '/room-find',    'verb' => 'PUT'],
         ['name' => 'room#create', 'url' => '/room-create',  'verb' => 'PUT'],
-
+        ['name' => 'room#update', 'url' => '/room-update',  'verb' => 'PUT'],
+        ['name' => 'room#delete', 'url' => '/room-delete',  'verb' => 'PUT'],
     ],
 ];

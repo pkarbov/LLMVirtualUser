@@ -30,6 +30,8 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;
 
+use OCA\LLaMaVirtualUser\Logger\Logger;
+
 class PersonalSection implements IIconSection {
 
     /** @var IL10N */
@@ -50,7 +52,7 @@ class PersonalSection implements IIconSection {
      * @returns string
      */
     public function getID(): string {
-        return 'llama-config'; //or a generic id if feasible
+        return 'llama'; //or a generic id if feasible
     }
 
     /**
@@ -69,13 +71,13 @@ class PersonalSection implements IIconSection {
      * the priority values. It is required to return a value between 0 and 99.
      */
     public function getPriority(): int {
-        return 80;
+        return 50;
     }
 
     /**
      * @return ?string The relative path to a an icon describing the section
      */
-    public function getIcon(): ?string {
+    public function getIcon(): string {
         return $this->urlGenerator->imagePath('core', 'categories/integration.svg');
     }
 

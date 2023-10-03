@@ -6,13 +6,13 @@
     SPDX-License-Identifier: CC0-1.0
     -->
     <id>llamavirtualuser</id>
-    <name>LLaMa Virtual User</name>
+    <name>LLaMaVirtualUser</name>
     <summary>LLaMa Virtual User</summary>
     <description><![CDATA[LLaMa Virtual user functions:
 1) Conduct chats similar to ChatGPT.
 2) Search folder with PDF documents. Answer questions based on these documents.
 3) Search internet for specific information.]]></description>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <licence>agpl</licence>
     <author mail="pkarbovn@gmail.com" homepage="https://github.com/pkarbov/nextcloud-llama">Pavlo Karbovnyk</author>
 
@@ -25,7 +25,7 @@
     <bugs>https://github.com/pkarbov/nextcloud-llama</bugs>
 
     <dependencies>
-        <nextcloud min-version="25" max-version="27"/>
+        <nextcloud min-version="25" max-version="28"/>
     </dependencies>
 
     <commands>

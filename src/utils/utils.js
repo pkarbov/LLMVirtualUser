@@ -13,3 +13,20 @@ export function isDarkMode() {
             ? true
             : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
 }
+
+/***********************************************************************
+ * Check if object is empty
+ *
+ * @param {obj} any
+ *
+ * @return {Boolean}
+ */
+export function isEmpty(obj) {
+    for (const prop in obj) {
+      console.log(prop)
+      if (Object.hasOwn(obj, prop)) {
+        return false
+      }
+    }
+    return true
+  }

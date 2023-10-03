@@ -3,103 +3,81 @@
     <!------------------------------------------------------------------------->
     <!-------------------           Add NEW Room            ------------------->
     <!------------------------------------------------------------------------->
-	  <form v-if="addNewRoom" @submit.prevent="createRoom">
-	    <input v-model="addRoomUsername" type="text" placeholder="Add username">
-	    <button class="button-image-ok" type="submit" :disabled="disableForm || !addRoomUsername" />
-	    <button class="button-image-close" @click="addNewRoom = false" />
-	    <template v-if="addTestData">
-	      <button class="button-data" @click="addNewRoom = false; addTestData()" />
-	    </template>
-	  </form>
-    <!------------------------------------------------------------------------->
-    <!------------------       Add NEW User to Room        -------------------->
-    <!------------------------------------------------------------------------->
-	  <form v-if="inviteRoomId" @submit.prevent="addRoomUser">
-      <input v-model="invitedUsername" type="text" placeholder="Add username">
-      <button class="button-image-ok" type="submit" :disabled="disableForm || !invitedUsername" />
-      <button class="button-image-close" @click="inviteRoomId = null" />
-	  </form>
-    <!------------------------------------------------------------------------->
-    <!-------------------           Remove Room             ------------------->
-    <!------------------------------------------------------------------------->
-	  <form v-if="removeRoomId" @submit.prevent="deleteRoomUser">
-	      <select v-model="removeUserId">
-		      <option default value="">
-		        Select User
-		      </option>
-		      <option v-for="user in removeUsers" :key="user._id" :value="user._id">
-		          {{ user.username }}
-		      </option>
-	      </select>
-        <button class="button-image-ok" type="submit" :disabled="disableForm || !removeUserId" />
-        <button class="button-image-close" @click="removeRoomId = null" />
-	  </form>
+    <!-- form v-if="addNewRoom" @submit.prevent="event_createRoom">
+        <button class="button-image-ok" type="submit" :disabled="disableForm" />
+        <button class="button-image-close" @click="addNewRoom = false" />
+        <template v-if="addTestData">
+            <button class="button-data" @click="addNewRoom = false; addTestData()" />
+        </template>
+    </form -->
     <!------------------------------------------------------------------------->
     <!-------------------               Chat                ------------------->
     <!------------------------------------------------------------------------->
-	  <vue-advanced-chat
-	      ref="chatWindow"
-	      :height="screenHeight"
-	      :theme="theme"
-	      :styles="JSON.stringify(styles)"
-	      :current-user-id="currentUserId"
-	      :room-id="roomId"
-	      :rooms="JSON.stringify(loadedRooms)"
-	      :loading-rooms="loadingRooms"
-	      :rooms-loaded="roomsLoaded"
-	      :messages="JSON.stringify(messages)"
-	      :messages-loaded="messagesLoaded"
-	      :room-message="roomMessage"
-	      :room-actions="JSON.stringify(roomActions)"
-	      :menu-actions="JSON.stringify(menuActions)"
-	      :message-selection-actions="JSON.stringify(messageSelectionActions)"
-	      :templates-text="JSON.stringify(templatesText)"
-	      :emoji-data-source="emojiDataSource"
-	      @fetch-more-rooms="fetchMoreRooms"
-	      @fetch-messages="fetchMessages($event.detail[0])"
-	      @send-message="sendMessage($event.detail[0])"
-	      @edit-message="editMessage($event.detail[0])"
-	      @delete-message="deleteMessage($event.detail[0])"
-	      @open-file="openFile($event.detail[0])"
-	      @open-user-tag="openUserTag($event.detail[0])"
-	      @add-room="addRoomEvent($event.detail[0])"
-	      @room-action-handler="menuActionHandler($event.detail[0])"
-	      @menu-action-handler="menuActionHandler($event.detail[0])"
-	      @message-selection-action-handler="messageSelectionActionHandler($event.detail[0])"
-	      @send-message-reaction="sendMessageReaction($event.detail[0])"
-	      @typing-message="typingMessage($event.detail[0])"
-	      @toggle-rooms-list="$emit('show-demo-options', $event.detail[0].opened)">
-	      <!-- <div
-		      v-for="message in messages"
-		      :slot="'message_' + message._id"
-		      :key="message._id"
-	      >
-		      New message container
-	      </div> -->
-	  </vue-advanced-chat>
+    <vue-advanced-chat
+        ref="chatWindow"
+        :height="screenHeight"
+        :theme="theme"
+        :styles="JSON.stringify(styles)"
+        :current-user-id="currentUserId"
+        :room-id="roomId"
+        :rooms="JSON.stringify(loadedRooms)"
+        :loading-rooms="loadingRooms"
+        :rooms-loaded="roomsLoaded"
+        :messages="JSON.stringify(messages)"
+        :messages-loaded="messagesLoaded"
+        :room-message="roomMessage"
+        :room-actions="JSON.stringify(roomActions)"
+        :menu-actions="JSON.stringify(menuActions)"
+        :message-selection-actions="JSON.stringify(messageSelectionActions)"
+        :message-actions="JSON.stringify(messageActions)"
+        :templates-text="JSON.stringify(templatesText)"
+        :emoji-data-source="emojiDataSource"
+        :show-audio="showAudio"
+        :show-files="showFiles"
+
+        @fetch-more-rooms="event_fetchMoreRooms"
+        @fetch-messages="event_fetchMessages($event.detail[0])"
+        @send-message="event_sendMessage($event.detail[0])"
+        @edit-message="event_editMessage($event.detail[0])"
+        @delete-message="event_deleteMessage($event.detail[0])"
+        @open-file="event_openFile($event.detail[0])"
+        @open-user-tag="event_openUserTag($event.detail[0])"
+        @add-room="event_createRoom($event.detail[0])"
+        @room-action-handler="event_menuActionHandler($event.detail[0])"
+        @menu-action-handler="event_menuActionHandler($event.detail[0])"
+        @message-selection-action-handler="event_messageSelectionActionHandler($event.detail[0])"
+        @send-message-reaction="event_sendMessageReaction($event.detail[0])"
+        @typing-message="event_typingMessage($event.detail[0])"
+        @toggle-rooms-list="event_showDemoOptions($event.detail[0].opened)">
+        <!-- <div
+            v-for="message in messages"
+            :slot="'message_' + message._id"
+            :key="message._id"
+        >
+            New message container
+        </div> -->
+    </vue-advanced-chat>
   </div>
 </template>
 
 <script>
 
 import * as firestoreService from './../../database/firestore.js'
-import * as firebaseService from './../../database/firebase.js'
-import * as storageService from './../../database/storage.js'
+// import * as firebaseService from './../../database/firebase.js'
+// import * as storageService from './../../database/storage.js'
+
 import { parseTimestamp, formatTimestamp } from './../../utils/dates.js'
 
-import { useUserStore } from '../../stores/userStore.js'
-import { useRoomStore } from '../../stores/roomStore.js'
-// import { useMsgStore } from '../../stores/msgStore.js'
-
-// import { EventBus } from '../../services/EventBus.js'
 import MessageEventService from '../../services/messageService.js'
-
-import { Subject } from 'rxjs'
+import UserEventService from '../../services/userService.js'
+import RoomEventService from '../../services/roomService.js'
 
 import logoAvatar from '../../icons/logo.png'
 
 import { loadState } from '@nextcloud/initial-state'
 import { register } from 'vue-advanced-chat'
+
+import { showSuccess, showError } from '@nextcloud/dialogs'
 
 register()
 
@@ -108,838 +86,1141 @@ export default {
 // /////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
     props: {
-	    theme: { type: String, required: true },
-	    isDevice: { type: Boolean, required: true },
-	    addTestData: { type: Function, required: false },
+        theme: { type: String, required: true },
+        isDevice: { type: Boolean, required: true },
+        // addTestData: { type: Function, required: true },
     },
 // /////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
     emits: ['show-demo-options'],
 // /////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
-    setup() {
-      const gUserStore = useUserStore()
-      const gRoomStore = useRoomStore()
-      // const gMsgStore = useMsgStore()
-      // return { gMsgStore, gRoomStore, gUserStore }
-      return { gRoomStore, gUserStore }
-    },
+    setup() {},
 // /////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
     data() {
-	    return {
-	        state: loadState('llamavirtualuser', 'chat-config'),
-	        emojiDataSource: 'img/data.json',
+        return {
+            state: loadState('llamavirtualuser', 'chat-config'),
+            emojiDataSource: 'img/data.json',
+            showAudio: 'false',
+            showFiles: 'false',
 
-	        roomsPerPage: 15,
-	        rooms: [],
-	        roomId: '',
-	        startRooms: null,
-	        endRooms: null,
-	        roomsLoaded: false,
-	        loadingRooms: true,
-	        allUsers: [],
-	        roomsLoadedCount: 0,
-	        selectedRoom: null,
-	        messagesPerPage: 20,
-	        messages: [],
-	        messagesLoaded: false,
-	        roomMessage: '',
-	        lastLoadedMessage: null,
-	        previousLastLoadedMessage: null,
-	        roomsListeners: [],
-	        listeners: [],
-	        typingMessageCache: '',
-	        disableForm: false,
-	        addNewRoom: null,
-	        addRoomUsername: '',
-	        inviteRoomId: null,
-	        invitedUsername: '',
-	        removeRoomId: null,
-	        removeUserId: '',
-	        removeUsers: [],
-	        roomActions: [
-		        { name: 'inviteUser', title: 'Invite User' },
-		        { name: 'removeUser', title: 'Remove User' },
-		        { name: 'deleteRoom', title: 'Delete Room' },
-	        ],
-	        menuActions: [
-		        { name: 'inviteUser', title: 'Invite User' },
-		        { name: 'removeUser', title: 'Remove User' },
-		        { name: 'deleteRoom', title: 'Delete Room' },
-	        ],
-	        messageSelectionActions: [{ name: 'deleteMessages', title: 'Delete' }],
-	        // eslint-disable-next-line vue/no-unused-properties
-	        styles: { container: { borderRadius: '4px' } },
-	        templatesText: [
-		        {
-		            tag: 'help',
-		            text: 'This is the help',
-		        },
-		        {
-		            tag: 'action',
-		            text: 'This is the action',
-		        },
-		        {
-		            tag: 'action 2',
-		            text: 'This is the second action',
-		        },
-	        ],
+            allUsers: [],
+            rooms: [],
+            roomId: '',
+            roomsLoaded: false,
+            loadingRooms: true,
+            roomsPerPage: 15,
+            roomsLoadedCount: 0,
+            selectedRoom: null,
 
-	        currentUserId: -1,
-	        llamaUser: {},
+            messages: [],
+            messagesPerPage: 20,
+            messagesLoadedCount: 0,
+            messagesLoaded: false,
+            messagesLastCount: 0,
 
-	        msgTimeout: new Subject(),
-	        t1: null,
-	        msgService: MessageEventService.getInstance(),
-	        // ,dbRequestCount: 0
-	    }
+            roomMessage: '',
+            typingMessageCache: { context: '', timestamp: 0 },
+            disableForm: false,
+            addNewRoom: null,
+
+            roomActions: [
+                { name: 'deleteRoom', title: 'Delete Room' },
+            ],
+            menuActions: [
+                { name: 'deleteRoom', title: 'Delete Room' },
+            ],
+            messageSelectionActions: [
+                { name: 'deleteMessages', title: 'Delete' },
+            ],
+            messageActions: [
+                { name: 'replyMessage', title: 'Reply' },
+                { name: 'editMessage', title: 'Edit' },
+                { name: 'deleteMessage', title: 'Delete', onlyMe: true },
+                { name: 'selectMessages', title: 'Select' },
+            ],
+
+            // eslint-disable-next-line vue/no-unused-properties
+            styles: { container: { borderRadius: '4px' } },
+            templatesText: [
+                {
+                    tag: 'help',
+                    text: 'This is the help',
+                },
+                {
+                    tag: 'action',
+                    text: 'This is the action',
+                },
+                {
+                    tag: 'action 2',
+                    text: 'This is the second action',
+                },
+            ],
+
+            currentUserId: -1,
+            llamaUser: {},
+
+            msgService: MessageEventService.getInstance(),
+            userService: UserEventService.getInstance(),
+            roomService: RoomEventService.getInstance(),
+            // ,dbRequestCount: 0
+        }
     },
 // /////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
     computed: {
-	    loadedRooms() {
-	        const loaded = this.rooms.slice(0, this.roomsLoadedCount)
-	        console.log('*ChatContainer1::loadedRooms()', loaded)
-
-	        return loaded
-	    },
+        loadedRooms() {
+            const loaded = this.rooms.slice(0, this.roomsLoadedCount)
+            return loaded
+        },
 // /////////////////////////////////////////////////////////////////////////////
-      screenHeight() {
-          const height = this.isDevice ? window.innerHeight + 'px' : 'calc(100vh - 80px)'
-	        console.log('*ChatContainer1::screenHeight()', height)
-
-	        return height
-	    },
+        screenHeight() {
+            const height = this.isDevice ? window.innerHeight + 'px' : 'calc(100vh - 80px)'
+            return height
+        },
     },
 // /////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
     mounted() {
-      console.log('ChatContainer1::mounted()')
+        console.log('ChatContainer1::mounted()')
+        console.log('ChatContainer1::mounted()::process', process)
 
-      this.llamaUser = this.state.llama_user
-      this.currentUserId = this.state.current_user.id
+        this.llamaUser = this.state.llama_user
+        this.currentUser = this.state.current_user
+        this.currentUserId = this.state.current_user.id
 
-	    this.addCss()
-	    this.fetchRooms()
-	    // firebaseService.updateUserOnlineStatus(this.currentUserId)
+        this.addCss()
+        this.fetchRooms()
     },
 // /////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
+
     methods: {
-	        addCss() {
-              console.log('*ChatContainer1::addCss()')
+        /***********************************************************************
+         * Setup event handlers, subscribe listeners etc.
+         *
+         * @return {void}
+         */
+         addCss() {
+            console.log('ChatContainer1::addCss()')
+            // //////////////////////////////////////////////////////////////
+            // Date configuration
+            const date = new Date()
+            const offset = date.getTimezoneOffset()
+            console.log('ChatContainer1::addCss()::offset', offset)
 
-              this.msgService.scheduleStart(this.msgTimeout, 2000)
-              // Last message event monitor
-              this.msgService._lastMessage_completed = this._listenLastMessage_completed.bind(this)
-              this.msgService._lastMessage_room = this._listenLastMessage_room.bind(this)
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+            console.log('ChatContainer1::addCss()::timezone', timezone)
+            // //////////////////////////////////////////////////////////////
+            // User online status
+            this.userService.updateUserOnlineStatus(this.currentUserId, new Date())
+            // //////////////////////////////////////////////////////////////
+            // //////////////////////////////////////////////////////////////
+            // User Event listeners
+            this.userService.onLineUsers.subscribe(this.listen_UsersOnlineStatus)
+            // //////////////////////////////////////////////////////////////
+            // Room Event listeners
+            this.roomService.onTypingUser.subscribe(this.listen_RoomsTypingUser)
+            this.roomService.onRoomUpdated.subscribe(this.listen_RoomsUpdate)
+            this.roomService.onRoomDeleted.subscribe(this.listen_RoomsDeleted)
+            this.roomService.onRoomProcess.subscribe(this.listen_RoomsProcess)
+            this.roomService.onRoomCreated.subscribe(this.listen_RoomsCreated)
+            // //////////////////////////////////////////////////////////////
+            // Message Event listeners
+            this.msgService.onMessageSend.subscribe(this.listen_MessageSend)
+            this.msgService.onLastMessage.subscribe(this.listen_LastMessage)
+            this.msgService.onMessageRoom.subscribe(this.listen_NewMessageRoom)
+            this.msgService.onMessageUpdate.subscribe(this.listen_MessageUpdate)
+            this.msgService.onMessageDelete.subscribe(this.listen_MessageDelete)
+            // //////////////////////////////////////////////////////////////
+        },
 
-	            // if (import.meta.env.MODE === 'development') {
-		            // const styles = await import('./../../styles/index.scss')
-		            // const style = document.createElement('style')
-		            // style.innerHTML = styles.default
-		            // this.$refs.chatWindow.shadowRoot.appendChild(style)
-	            // }
-	        },
+        /***********************************************************************
+         * Reset rooms data values
+         *
+         * @return {void}
+         */
+         resetRooms() {
+            console.log('ChatContainer1::resetRooms()')
+
+            this.rooms = []
+            this.roomsLoaded = true
+            this.loadingRooms = true
+            this.roomsLoadedCount = 0
+        },
+
+        /***********************************************************************
+         * Reset messages data values
+         *
+         * @return {void}
+         */
+         resetMessages() {
+            console.log('ChatContainer1::resetMessages()')
+
+            this.messages = []
+            this.messagesLoaded = false
+            this.messagesLoadedCount = 0
+            this.messagesLastCount = 0
+        },
+
+        /***********************************************************************
+         * Reset form data values
+         *
+         * @return {void}
+         */
+         resetForms() {
+            console.log('ChatContainer1::resetForms()')
+
+            this.disableForm = false
+            this.addNewRoom = null
+            this.removeRoomId = null
+        },
+
 // /////////////////////////////////////////////////////////////////////////////
-	        resetRooms() {
-              console.log('*ChatContainer1::resetRooms()')
+         fetchRooms() {
+            console.log('ChatContainer1::fetchRooms()')
 
-	            this.loadingRooms = true
-	            this.roomsLoadedCount = 0
-	            this.rooms = []
-	            this.roomsLoaded = true
-	            this.startRooms = null
-	            this.endRooms = null
-	            this.roomsListeners.forEach(listener => listener())
-	            this.roomsListeners = []
-	            this.resetMessages()
-	        },
+            this.resetRooms()
+            this.resetMessages()
+            this.event_fetchMoreRooms()
+        },
 // /////////////////////////////////////////////////////////////////////////////
-	        resetMessages() {
-              console.log('ChatContainer1::resetMessages()')
+         event_fetchMoreRooms() {
+            console.log('ChatContainer1::event_fetchMoreRooms()')
 
-	            this.messages = []
-	            this.messagesLoaded = false
-	            this.lastLoadedMessage = null
-	            this.previousLastLoadedMessage = null
-	            this.listeners.forEach(listener => listener())
-	            this.listeners = []
-	        },
+            const query = this.roomService.roomsQuery(
+                this.currentUserId,
+                this.roomsPerPage,
+                this.roomsLoadedCount
+            )
+            this.roomService.fetchMoreRooms(query)
+        },
 // /////////////////////////////////////////////////////////////////////////////
-	        fetchRooms() {
-              console.log('ChatContainer1::fetchRooms()')
+         async uploadFile({ file, messageId, roomId, userId }) {
+            console.log('ChatContainer1::uploadFile()', file, messageId, roomId)
 
-	            this.resetRooms()
-	            this.fetchMoreRooms()
-	        },
+            return new Promise(resolve => {
+                let type = file.extension || file.type
+                if (type === 'svg' || type === 'pdf') {
+                    type = file.type
+                }
+                this.msgService.uploadMessageFile(messageId, roomId, userId, file,
+                    _progress => {
+                        this.updateFileProgress(messageId, _progress)
+                    },
+                    _url => {
+                        //  const message = await this.msgService.getMessage(roomId, messageId)
+                        const message = this.messages.find(message => (message._id === messageId))
+                        message.files.forEach(f => {
+                            delete f.progress
+                            if (f.url === file.localUrl) {
+                                f.url = _url
+                            }
+                        })
+                        this.msgService.updateMessageFile(messageId, roomId, userId, file)
+                        resolve(true)
+                    },
+                    _error => {
+                        resolve(false)
+                        showError('Upload Message Error')
+                    }
+                )
+            })
+        },
 // /////////////////////////////////////////////////////////////////////////////
-	    async fetchMoreRooms() {
-          console.log('ChatContainer1::fetchMoreRooms()')
+         updateFileProgress(messageId, progress) {
+            // console.log('ChatContainer1::updateFileProgress()', messageId, progress)
 
-	        if (this.endRooms && !this.startRooms) {
-		        this.roomsLoaded = true
-		        return
-	        }
-	        const query = this.gRoomStore.roomsQuery(
-		        this.currentUserId,
-		        this.roomsPerPage,
-		        this.roomsLoadedCount
-	        )
-	        const data = await this.gRoomStore.getRooms(query)
-	        // ///////////////////////////////////////////////////////////////////
-	        // console.log('ChatContainer1::fetchMoreRooms()::getRooms()', data)
-	        // this.incrementDbCounter('Fetch Rooms', data.length)
-	        this.roomsLoaded = (data.length === 0) || (data.length < this.roomsPerPage)
-	        if (this.startRooms) this.endRooms = this.startRooms
-	        this.startRooms = data[data.length - 1]
-	        const roomUserIds = []
-	        data.forEach(room => {
-		        room.users.forEach(userId => {
-		            const foundUser = this.allUsers.find(user => (user?.id === userId))
-		            if (!foundUser && roomUserIds.indexOf(userId) === -1) {
-			            roomUserIds.push(userId)
-		            }
-		        })
-	        })
-	        // this.incrementDbCounter('Fetch Room Users', roomUserIds.length)
-	        const rawUsers = []
-	        roomUserIds.forEach(userId => {
-		        const promise = this.gUserStore.getUser(userId)
-		        rawUsers.push(promise)
-	        })
-	        this.allUsers = [...this.allUsers, ...(await Promise.all(rawUsers))]
-	        // ///////////////////////////////////////////////////////////////////
-	        // console.log('ChatContainer1::fetchMoreRooms()::allUsers()', this.allUsers)
-	        const roomList = {}
-	        data.forEach(room => {
-		        roomList[room.id] = { ...room, users: [] }
-		        room.users.forEach(userId => {
-		            const foundUser = this.allUsers.find(user => (user?.id === userId))
-		            if (foundUser) roomList[room.id].users.push(foundUser)
-		        })
-	        })
-	        // ///////////////////////////////////////////////////////////////////
-	        // console.log('ChatContainer1::fetchMoreRooms()::roomList()', roomList)
-	        const formattedRooms = []
-	        Object.keys(roomList).forEach(key => {
-		        const room = roomList[key]
-		        const roomContacts = room.users.filter(
-		            user => user._id !== this.currentUserId
-		        )
-		        room.roomName =
-		            roomContacts.map(user => user.username).join(', ') || 'Myself'
-		        const roomAvatar =
-		          (roomContacts.length === 1) && (roomContacts[0].avatar)
-			          ? roomContacts[0].avatar
-			          : logoAvatar
-            formattedRooms.push({
+            const message = this.messages.find(message => message._id === messageId)
+            if (!message || !message.files) return
+
+            // message.files.find(file => (file.url === fileUrl)).progress = progress
+            // message.files.find(file => (file.id === fileId)).progress = progress
+            message.files.find(file => (file.name === progress.file.name)).progress = progress.progress
+            this.messages = [...this.messages]
+        },
+
+        /***********************************************************************
+         * Format files to store with Message
+         *
+         * @param {files} Array files to format
+         *
+         * @return {formattedFiles} Array with forated files
+         */
+         formattedFiles(files) {
+            // console.log('ChatContainer1::formattedFiles()', files)
+
+            const formattedFiles = []
+            files.forEach(file => { formattedFiles.push(this.formattedFile(file)) })
+            return formattedFiles
+        },
+
+        /***********************************************************************
+         * Format file to store with Message
+         *
+         * @param {file} Object file to format
+         *
+         * @return {formattedFile} Object with formated file
+         */
+         formattedFile(file) {
+            // console.log('ChatContainer1::formattedFile())', file)
+
+            const formattedFile = {
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                extension: file.extension || file.type,
+                url: file.url || file.localUrl,
+            }
+            if (file.audio) {
+                formattedFile.audio = true
+                formattedFile.duration = file.duration
+            }
+            return formattedFile
+        },
+
+        /***********************************************************************
+         * Event open file
+         *
+         * @param {roomId} Object file to popen
+         *
+         * @return {void}
+         */
+
+         event_openFile({ file }) {
+            console.log('ChatContainer1::event_openFile()', file)
+
+            window.open(file.file.localUrl, '_blank')
+        },
+
+        /***********************************************************************
+         * Event. Show demo options
+         *
+         * @param {roomId} Object file to popen
+         *
+         * @return {void}
+         */
+
+         event_showDemoOptions(bool) {
+            console.log('ChatContainer1::event_showDemoOptions()', bool)
+            this.$emit('show-demo-options', bool)
+        },
+
+// /////////////////////////////////////////////////////////////////////////////
+         async event_openUserTag({ user }) {
+            console.log('ChatContainer1::event_openUserTag()', user)
+
+            let roomId
+            this.rooms.forEach(room => {
+                if (room.users.length === 2) {
+                    const userId1 = room.users[0]._id
+                    const userId2 = room.users[1]._id
+                    if (
+                            (userId1 === user._id || userId1 === this.currentUserId)
+                         && (userId2 === user._id || userId2 === this.currentUserId)
+                      ) {
+                          roomId = room.roomId
+                      }
+                }
+            })
+
+            if (roomId) {
+                this.roomId = roomId
+                return
+            }
+
+            const query1 = await firestoreService.getUserRooms(
+                this.currentUserId,
+                user._id,
+            )
+
+            if (query1.data.length) {
+                return this.loadRoom(query1)
+            }
+
+            const query2 = await firestoreService.getUserRooms(
+                user._id,
+                this.currentUserId,
+            )
+
+            if (query2.data.length) {
+                return this.loadRoom(query2)
+            }
+
+            const users = (user._id === this.currentUserId)
+                ? [this.currentUserId]
+                : [user._id, this.currentUserId]
+
+            const room = await firestoreService.addRoom({
+                users,
+                lastUpdated: new Date(),
+            })
+
+            this.roomId = room.id
+            this.fetchRooms()
+        },
+// /////////////////////////////////////////////////////////////////////////////
+         async loadRoom(query) {
+            console.log('ChatContainer1::loadRoom()', query)
+
+            query.forEach(async room => {
+                if (this.loadingRooms) return
+                await this.roomService.updateRoomSeen(room.id, new Date())
+                this.roomId = room.id
+                this.fetchRooms()
+            })
+        },
+
+        /***********************************************************************
+         * Event. Menu action handler
+         *
+         * @param {action} Text Action name
+         * @param {roomId} Long Room ID reaction attached to
+         *
+         * @return {void}
+         */
+         event_menuActionHandler({ action, roomId }) {
+            console.log('ChatContainer1::event_menuActionHandler()', action, roomId)
+
+            switch (action.name) {
+                case 'deleteRoom':
+                    return this.deleteRoom(roomId)
+            }
+        },
+
+        /***********************************************************************
+         * Event. Menu selection action handler
+         *
+         * @param {action} Text Action name
+         * @param {roomId} Long Room ID reaction attached to
+         *
+         * @return {void}
+         */
+         event_messageSelectionActionHandler({ action, messages, roomId }) {
+            console.log('ChatContainer1::event_messageSelectionActionHandler()', action, messages, roomId)
+
+            switch (action.name) {
+                case 'deleteMessages':
+                    messages.forEach(message => {
+                          this.event_deleteMessage({ message, roomId })
+                    })
+            }
+        },
+
+        /***********************************************************************
+         * Event. Send message reaction
+         *
+         * @param {reaction} Text Reaction
+         * @param {remove} Boolean Remove or Add reaction
+         * @param {messageId} Long Message ID reaction attached to
+         * @param {roomId} Long Room ID reaction attached to
+         *
+         * @return {void}
+         */
+         async event_sendMessageReaction({ reaction, remove, messageId, roomId }) {
+            console.log('ChatContainer1::event_sendMessageReaction()', reaction, remove, messageId, roomId)
+
+            this.msgService.updateMessageReactions(
+                  messageId,
+                  this.currentUserId,
+                  reaction.unicode,
+                  remove ? 'remove' : 'add',
+                  new Date()
+            )
+        },
+
+        /***********************************************************************
+         * Event. Typing message
+         *
+         * @param {message} Text Message
+         * @param {roomId} Long Room id
+         *
+         * @return {void}
+         */
+         event_typingMessage({ message, roomId }) {
+            // console.log('ChatContainer1::event_typingMessage()', message, roomId)
+
+            if (roomId) {
+                if (message?.length > 1) {
+                    this.typingMessageCache.context = message
+                    return
+                }
+                if (message?.length === 1 && this.typingMessageCache.context) {
+                    this.typingMessageCache.context = message
+                    return
+                }
+                if (message?.length === 0) {
+                    this.typingMessageCache.timestamp = 0
+                }
+                if (message?.length === 1) {
+                    this.typingMessageCache.timestamp = new Date()
+                }
+                this.typingMessageCache.context = message
+
+                this.roomService.updateRoomTypingUsers(
+                    roomId,
+                    this.currentUserId,
+                    message ? 'add' : 'remove'
+                )
+            }
+        },
+
+        /***********************************************************************
+         * Listener. Typing user
+         *
+         * @param {query} Object { userId: long, lastChanged: Date}
+         *
+         * @return {void}
+         */
+         listen_RoomsTypingUser(query) {
+            // console.log('ChatContainer1::listen_RoomsTypingUser()', query)
+
+            const foundRoom = this.rooms.find(r => (r.roomId === query.roomId))
+            if (foundRoom) {
+                if (query.message === 'add') {
+                    foundRoom.typingUsers = query.userId
+                } else if (query.message === 'remove') {
+                    foundRoom.typingUsers = null
+                }
+            }
+
+        },
+
+        /***********************************************************************
+         * Listener. Room delete
+         *
+         * @param {room} Object { id: long, lastUpdated: seconds}
+         *
+         * @return {void}
+         */
+         listen_RoomsCreated({ roomsLen, room }) {
+            console.log('ChatContainer1::listen_RoomsCreated()', room)
+            this.fetchRooms()
+        },
+
+        /***********************************************************************
+         * Listener. Room delete
+         *
+         * @param {room} Object { id: long, lastUpdated: seconds}
+         *
+         * @return {void}
+         */
+         listen_RoomsDeleted({ roomsLen, room }) {
+            console.log('ChatContainer1::listen_RoomsDeleted()', room)
+            this.fetchRooms()
+        },
+
+        /***********************************************************************
+         * Listener. for room updates
+         *
+         * @param {room} Object { id: long, lastUpdated: seconds}
+         *
+         * @return {void}
+         */
+         listen_RoomsUpdate({ roomsLen, room }) {
+            // console.log('ChatContainer1::listen_RoomsUpdate()', roomsLen, room)
+
+            const foundRoom = this.rooms.find(r => (r.roomId === room.id))
+            if (foundRoom) {
+                foundRoom.index = room.lastUpdated.seconds
+            }
+
+        },
+
+        /***********************************************************************
+         * Listener. for room process
+         *
+         * @param {room} Object { id: long, lastUpdated: seconds}
+         *
+         * @return {void}
+         */
+         async listen_RoomsProcess({ roomsLen, room }) {
+            console.log('ChatContainer1::listen_RoomsProcess()', roomsLen, room)
+           // ///////////////////////////////////////////////////////////////////
+           if (roomsLen === 0) {
+                  this.roomsLoaded = true
+                  this.loadingRooms = false
+                  return
+            }
+            // ///////////////////////////////////////////////////////////////////
+            const roomUserIds = []
+            room.users.forEach(userId => {
+                const foundUser = this.allUsers.find(user => (user?.id === userId))
+                if (!foundUser && roomUserIds.indexOf(userId) === -1) {
+                    roomUserIds.push(userId)
+                }
+            })
+            // ///////////////////////////////////////////////////////////////////
+            const rawUsers = []
+            roomUserIds.forEach(userId => {
+                const user = this.userService.getUser(userId)
+                rawUsers.push(user)
+            })
+            this.allUsers = [...this.allUsers, ...(await Promise.all(rawUsers))]
+            // ///////////////////////////////////////////////////////////////////
+            const userList = []
+            room.users.forEach(userId => {
+                const foundUser = this.allUsers.find(user => (user?.id === userId))
+                if (foundUser) userList.push(foundUser)
+            })
+            room.users = userList
+            const roomContacts = userList.filter(
+                user => user._id !== this.currentUserId
+            )
+            // ///////////////////////////////////////////////////////////////////
+            // get room name
+            const roomName =
+                roomContacts.map(user => user.username).join(', ') || 'Myself'
+            // get room Avatar
+            const roomAvatar =
+                (roomContacts.length === 1) && (roomContacts[0].avatar)
+                    ? roomContacts[0].avatar
+                    : logoAvatar
+            // ///////////////////////////////////////////////////////////////////
+            //  Create room
+            const formattedRoom = {
                 ...room,
-                roomId: key,
+                roomName,
+                roomId: room.id,
                 avatar: roomAvatar,
                 index: room.lastUpdated.seconds,
+                // unreadCount: 4,
                 lastMessage: {
-	                content: 'Room created',
-	                timestamp: formatTimestamp(
-	                    new Date(room.lastUpdated.seconds),
-	                    room.lastUpdated
-	                ),
+                    content: 'Room created',
+                    timestamp: formatTimestamp(
+                        new Date(room.lastUpdated.seconds),
+                        room.lastUpdated
+                    ),
                 },
-            })
-          })
-	        this.rooms = this.rooms.concat(formattedRooms)
-	        // ///////////////////////////////////////////////////////////////////
-	        // console.log('ChatContainer1::fetchMoreRooms()::rooms()', this.rooms)
-	        if (!this.rooms.length) {
-		          this.loadingRooms = false
-		          this.roomsLoadedCount = 0
-	        }
-	        // this.listenUsersOnlineStatus(formattedRooms)
-	        // this.listenRooms(query)
-	        console.log('-------------------------------------------------------')
-	        // setTimeout(() => console.log('TOTAL', this.dbRequestCount), 2000)
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    formatLastMessage(message, room) {
-          console.log('ChatContainer1::formatLastMessage()', message, room)
+            }
+            // ///////////////////////////////////////////////////////////////////
+            // Add to global rooms
+            this.rooms.push(formattedRoom)
+            // ///////////////////////////////////////////////////////////////////
+            // Loaded last room
+            if ((roomsLen + this.roomsLoadedCount) === this.rooms.length) {
+                this.msgService.getRoomsLastMessage(this.currentUserId)
+                this.rooms.sort((a, b) => {
+                    return (a.index - b.index)
+                })
+            }
 
-	        if (!message.timestamp) return
-	        let content = message.content
-	        if (message.files?.length) {
-		          const file = message.files[0]
-		          content = `${file.name}.${file.extension || file.type}`
-	        }
-	        const username =
-		          (message.sender_id !== this.currentUserId)
-		              ? room.users.find(user => message.sender_id === user._id)?.username
-		              : ''
-	        return {
-		        ...message,
-		        ...{
-		          _id: message.id,
-		          content,
-		          senderId: message.sender_id,
-		          timestamp: formatTimestamp(
-			            new Date(message.timestamp.seconds * 1000),
-			            message.timestamp
-		          ),
-		          username,
-		          distributed: true,
-		          seen: (message.sender_id === this.currentUserId) ? message.seen : null,
-		          new:
-			          (message.sender_id !== this.currentUserId) &&
-			          (!message.seen || !message.seen[this.currentUserId]),
-		        },
-	        }
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    fetchMessages({ room, options = {} }) {
-          console.log('ChatContainer1::fetchMessages()', room, options)
+        },
 
-	        this.$emit('show-demo-options', false)
-	        if (options.reset) {
-		        this.resetMessages()
-	        }
-	        if (this.previousLastLoadedMessage && !this.lastLoadedMessage) {
-		        this.messagesLoaded = true
-		        return
-	        }
-	        this.selectedRoom = room.roomId
-	        firestoreService
-		        .getMessages(room.roomId, this.messagesPerPage, this.lastLoadedMessage)
-		        .then(({ data, docs }) => {
-		            // this.incrementDbCounter('Fetch Room Messages', messages.length)
-		            if (this.selectedRoom !== room.roomId) return
-		            if (data.length === 0 || data.length < this.messagesPerPage) {
-			            setTimeout(() => {
-			                this.messagesLoaded = true
-			            }, 0)
-		            }
-		            if (options.reset) this.messages = []
-		            data.forEach(message => {
-			            const formattedMessage = this.formatMessage(room, message)
-			            this.messages.unshift(formattedMessage)
-		            })
-		            if (this.lastLoadedMessage) {
-			            this.previousLastLoadedMessage = this.lastLoadedMessage
-		            }
-		            this.lastLoadedMessage = docs[docs.length - 1]
-		            this.listenMessages(room)
-		        })
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    listenMessages(room) {
-          console.log('ChatContainer1::listenMessages()', room)
+        /***********************************************************************
+         * Listener. Messages send by users
+         *
+         * @param {message} Object Message
+         *
+         * @return {void}
+         */
+         async listen_MessageSend({ msgLen, msg }) {
+            console.log('ChatContainer1::listen_MessageSend()', msgLen, msg)
 
-	        const listener = firestoreService.listenMessages(
-		        room.roomId,
-		        this.lastLoadedMessage,
-		        this.previousLastLoadedMessage,
-		        messages => {
-                console.log('firestoreService::listenMessages()', messages)
-		            messages.forEach(message => {
-			            const formattedMessage = this.formatMessage(room, message)
-			            const messageIndex = this.messages.findIndex(
-			                m => m._id === message.id
-			            )
-			            if (messageIndex === -1) {
-			                this.messages = this.messages.concat([formattedMessage])
-			            } else {
-			                this.messages[messageIndex] = formattedMessage
-			                this.messages = [...this.messages]
-			            }
-			            this.markMessagesSeen(room, message)
-		            })
-		        }
-	        )
-	        this.listeners.push(listener)
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    markMessagesSeen(room, message) {
-          console.log('ChatContainer1::markMessagesSeen()', room, message)
+            const roomId = msg.idRoom
+            let file
 
-	        if ((message.sender_id !== this.currentUserId) &&
-	            (!message.seen || !message.seen[this.currentUserId])) {
-		            firestoreService.updateMessage(room.roomId, message.id, {
-		                [`seen.${this.currentUserId}`]: new Date(),
-		        })
-	        }
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    formatMessage(room, message) {
-          // console.log('ChatContainer1::formatMessage()', room, message)
+            if (msg.files) {
+                for (let index = 0; index < msg.files.length; index++) {
+                    file = msg.files[index]
+                    try {
+                        file.blob = await fetch(file.url).then(r => r.blob())
+                        await this.uploadFile({ file, messageId: msg.id, roomId, userId: this.currentUserId })
+                    } catch (err) {
+                        console.log(file)
+                        // console.error(err)
+                    }
+                }
+            }
 
-	        // const senderUser = room.users.find(user => user._id === message.sender_id)
-	        const formattedMessage = {
-		        ...message,
-		        ...{
-		            senderId: message.sender_id,
-		            _id: message.id,
-		            seconds: message.timestamp.seconds,
-		            timestamp: parseTimestamp(message.timestamp, 'HH:mm'),
-		            date: parseTimestamp(message.timestamp, 'DD MMMM YYYY'),
-		            username: room.users.find(user => message.sender_id === user._id)?.username,
-		            // avatar: senderUser ? senderUser.avatar : null,
-		            distributed: true,
-		        },
-	        }
-	        if (message.replyMessage) {
-		        formattedMessage.replyMessage = {
-		            ...message.replyMessage,
-		            ...{
-			              senderId: message.replyMessage.sender_id,
-		            },
-		        }
-	        }
-	        return formattedMessage
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async sendMessage({ content, roomId, files, replyMessage }) {
-          console.log('ChatContainer1::sendMessage()', content, roomId, files, replyMessage)
+            this.msgService.completeMessagesPHP(msg)
+            // this.msgService.completeMessagesAXIOS(msg)
 
-	        const message = {
-		        sender_id: this.currentUserId,
-		        content,
-		        timestamp: new Date(),
-	        }
-	        if (files) {
-		        message.files = this.formattedFiles(files)
-	        }
-	        if (replyMessage) {
-		          message.replyMessage = {
-		              _id: replyMessage._id,
-		              content: replyMessage.content,
-		              sender_id: replyMessage.senderId,
-		          }
-		          if (replyMessage.files) {
-		              message.replyMessage.files = replyMessage.files
-		          }
-	        }
-	        const { id } = await firestoreService.addMessage(roomId, message)
-	        if (files) {
-		        for (let index = 0; index < files.length; index++) {
-		            await this.uploadFile({ file: files[index], messageId: id, roomId })
-		        }
-	        }
-	        firestoreService.updateRoom(roomId, { lastUpdated: new Date() })
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async editMessage({ messageId, newContent, roomId, files }) {
-          console.log('ChatContainer1::editMessage()', messageId, newContent, roomId, files)
+            this.roomService.updateRoomSeen(roomId, new Date((msg.timestamp.seconds) * 1000))
+        },
 
-	        const newMessage = { edited: new Date() }
-	        newMessage.content = newContent
-	        if (files) {
-		        newMessage.files = this.formattedFiles(files)
-	        } else {
-		        newMessage.files = firestoreService.deleteDbField
-	        }
-	        await firestoreService.updateMessage(roomId, messageId, newMessage)
-	        if (files) {
-		        for (let index = 0; index < files.length; index++) {
-		            if (files[index]?.blob) {
-			            await this.uploadFile({ file: files[index], messageId, roomId })
-		            }
-		        }
-	        }
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async deleteMessage({ message, roomId }) {
-          console.log('ChatContainer1::deleteMessage()', message, roomId)
+        /***********************************************************************
+         * Event. Add room
+         *
+         * @param {event} Object
+         *
+         * @return {void}
+         */
+         event_addRoom(event) {
+            console.log('ChatContainer1::event_addRoom()', event)
 
-	        await firestoreService.updateMessage(roomId, message._id, {
-		        deleted: new Date(),
-	        })
-	        const { files } = message
-	        if (files) {
-		        files.forEach(file => {
-		            storageService.deleteFile(this.currentUserId, message._id, file)
-		        })
-	        }
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async uploadFile({ file, messageId, roomId }) {
-          console.log('ChatContainer1::uploadFile()', file, messageId, roomId)
-
-	        return new Promise(resolve => {
-		        let type = file.extension || file.type
-		        if (type === 'svg' || type === 'pdf') {
-		            type = file.type
-		        }
-		        storageService.listenUploadImageProgress(
-		            this.currentUserId,
-		            messageId,
-		            file,
-		            type,
-		            progress => {
-			              this.updateFileProgress(messageId, file.localUrl, progress)
-		            },
-		            _error => {
-			            resolve(false)
-		            },
-		            async url => {
-			            const message = await firestoreService.getMessage(roomId, messageId)
-			            message.files.forEach(f => {
-			                if (f.url === file.localUrl) {
-				                  f.url = url
-			                }
-			            })
-			            await firestoreService.updateMessage(roomId, messageId, {
-			                files: message.files,
-			            })
-			            resolve(true)
-		          }
-		        )
-	        })
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    updateFileProgress(messageId, fileUrl, progress) {
-          console.log('ChatContainer1::updateFileProgress()', messageId, fileUrl, progress)
-
-	        const message = this.messages.find(message => message._id === messageId)
-	        if (!message || !message.files) return
-	        message.files.find(file => file.url === fileUrl).progress = progress
-	        this.messages = [...this.messages]
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    formattedFiles(files) {
-          console.log('ChatContainer1::formattedFiles()', files)
-
-	        const formattedFiles = []
-	        files.forEach(file => {
-		          const messageFile = {
-		              name: file.name,
-		              size: file.size,
-		              type: file.type,
-		              extension: file.extension || file.type,
-		              url: file.url || file.localUrl,
-		          }
-		          if (file.audio) {
-		              messageFile.audio = true
-		              messageFile.duration = file.duration
-		          }
-		          formattedFiles.push(messageFile)
-	        })
-	        return formattedFiles
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    openFile({ file }) {
-          console.log('ChatContainer1::openFile()', file)
-
-	        window.open(file.file.url, '_blank')
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async openUserTag({ user }) {
-          console.log('ChatContainer1::openUserTag()', user)
-
-	        let roomId
-	        this.rooms.forEach(room => {
-		        if (room.users.length === 2) {
-		            const userId1 = room.users[0]._id
-		            const userId2 = room.users[1]._id
-		            if (
-			                (userId1 === user._id || userId1 === this.currentUserId)
-			             && (userId2 === user._id || userId2 === this.currentUserId)
-		              ) {
-			              roomId = room.roomId
-		              }
-		        }
-	        })
-	        if (roomId) {
-		        this.roomId = roomId
-		        return
-	        }
-	        const query1 = await firestoreService.getUserRooms(
-		        this.currentUserId,
-		        user._id,
-	        )
-	        if (query1.data.length) {
-            return this.loadRoom(query1)
-	        }
-	        const query2 = await firestoreService.getUserRooms(
-		        user._id,
-		        this.currentUserId,
-	        )
-	        if (query2.data.length) {
-		        return this.loadRoom(query2)
-	        }
-
-	        const users = (user._id === this.currentUserId)
-		              ? [this.currentUserId]
-		              : [user._id, this.currentUserId]
-
-          const room = await firestoreService.addRoom({
-              users,
-              lastUpdated: new Date(),
-          })
-
-	        this.roomId = room.id
-	        this.fetchRooms()
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async loadRoom(query) {
-          console.log('ChatContainer1::loadRoom()', query)
-
-	        query.forEach(async room => {
-		        if (this.loadingRooms) return
-		        await firestoreService.updateRoom(room.id, { lastUpdated: new Date() })
-		        this.roomId = room.id
-		        this.fetchRooms()
-	        })
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    menuActionHandler({ action, roomId }) {
-          console.log('ChatContainer1::menuActionHandler()', action, roomId)
-
-	        switch (action.name) {
-		        case 'inviteUser':
-		            return this.inviteUser(roomId)
-		        case 'removeUser':
-		            return this.removeUser(roomId)
-		        case 'deleteRoom':
-		            return this.deleteRoom(roomId)
-	        }
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    messageSelectionActionHandler({ action, messages, roomId }) {
-          console.log('ChatContainer1::messageSelectionActionHandler()', action, messages, roomId)
-
-	        switch (action.name) {
-		        case 'deleteMessages':
-		            messages.forEach(message => {
-			              this.deleteMessage({ message, roomId })
-		            })
-	        }
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async sendMessageReaction({ reaction, remove, messageId, roomId }) {
-          console.log('ChatContainer1::sendMessageReaction()', reaction, remove, messageId, roomId)
-
-	        firestoreService.updateMessageReactions(
-		          roomId,
-		          messageId,
-		          this.currentUserId,
-		          reaction.unicode,
-		          remove ? 'remove' : 'add'
-	        )
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    typingMessage({ message, roomId }) {
-          console.log('ChatContainer1::typingMessage()', message, roomId)
-
-	        if (roomId) {
-		        if (message?.length > 1) {
-		            this.typingMessageCache = message
-		            return
-		        }
-		        if (message?.length === 1 && this.typingMessageCache) {
-		            this.typingMessageCache = message
-		            return
-		        }
-		        this.typingMessageCache = message
-		            firestoreService.updateRoomTypingUsers(
-		                roomId,
-		                this.currentUserId,
-		                message ? 'add' : 'remove'
-		            )
-	        }
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async listenRooms(query) {
-          console.log('ChatContainer1::listenRooms()', query)
-
-	        const listener = firestoreService.listenRooms(query, rooms => {
-	          // console.log('firestoreService::listenRooms()', query, rooms)
-		        // this.incrementDbCounter('Listen Rooms Typing Users', rooms.length)
-		        rooms.forEach(room => {
-		            const foundRoom = this.rooms.find(r => r.roomId === room.id)
-		            if (foundRoom) {
-			              foundRoom.typingUsers = room.typingUsers
-			              foundRoom.index = room.lastUpdated.seconds
-		            }
-		        })
-	        })
-	        this.roomsListeners.push(listener)
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    listenUsersOnlineStatus(rooms) {
-          console.log('ChatContainer1::listenUsersOnlineStatus()', rooms)
-
-	        rooms.forEach(room => {
-		        room.users.forEach(user => {
-		            const listener = firebaseService.firebaseListener(
-			            firebaseService.userStatusRef(user._id),
-			            snapshot => {
-                      // console.log('firebaseService::firebaseListener()', snapshot)
-			                if (!snapshot || !snapshot.val()) return
-			                const lastChanged = formatTimestamp(
-				                  new Date(snapshot.val().lastChanged),
-				                  new Date(snapshot.val().lastChanged)
-			                )
-			                user.status = { ...snapshot.val(), lastChanged }
-			                const roomIndex = this.rooms.findIndex(
-				                  r => (room.roomId === r.roomId)
-			                )
-			                this.rooms[roomIndex] = room
-			                this.rooms = [...this.rooms]
-			            }
-		            )
-		            this.roomsListeners.push(listener)
-		        })
-	        })
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    addRoomEvent(event) {
-          console.log('ChatContainer1::addRoomEvent()', event)
-
-	        if (!this.addNewRoom) {
-	            this.addRoom()
-	        } else {
+            if (!this.addNewRoom) {
+                this.addRoom()
+            } else {
               this.addNewRoom = false
-	        }
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    addRoom() {
-          console.log('ChatContainer1::addRoom()')
+            }
+        },
 
-	        this.resetForms()
-	        this.addNewRoom = true
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async createRoom() {
-          console.log('ChatContainer1::createRoom()')
+        /***********************************************************************
+         * Function add room
+         *
+         * @return {void}
+         */
+         addRoom() {
+            console.log('ChatContainer1::addRoom()')
 
-	        this.disableForm = true
-	        const { id } = await firestoreService.addUser({
-		        username: this.addRoomUsername,
-	        })
-
-	        await firestoreService.updateUser(id, { _id: id })
-	        await firestoreService.addRoom({
-		          users: [id, this.currentUserId],
-		          lastUpdated: new Date(),
-	        })
-
-	        this.addNewRoom = false
-	        this.addRoomUsername = ''
-	        this.fetchRooms()
-	    },
+            this.resetForms()
+            this.addNewRoom = true
+        },
 // /////////////////////////////////////////////////////////////////////////////
-	    inviteUser(roomId) {
-          console.log('ChatContainer1::inviteUser()', roomId)
+        async event_createRoom(event) {
+            console.log('ChatContainer1::event_createRoom()', event)
 
-	        this.resetForms()
-	        this.inviteRoomId = roomId
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async addRoomUser() {
-          console.log('ChatContainer1::addRoomUser()')
+            this.disableForm = true
+            // add room
+            const userArray = [this.state.current_user, this.state.llama_user]
+            this.roomService.createRoom(userArray, new Date())
 
-	        this.disableForm = true
-	        const { id } = await firestoreService.addUser({
-		        username: this.invitedUsername,
-	        })
-	        await firestoreService.updateUser(id, { _id: id })
-	        await firestoreService.addRoomUser(this.inviteRoomId, id)
-	        this.inviteRoomId = null
-	        this.invitedUsername = ''
-	        this.fetchRooms()
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    removeUser(roomId) {
-          console.log('ChatContainer1::removeUser()', roomId)
+            this.addNewRoom = false
+            showSuccess('Room Created')
+        },
 
-	        this.resetForms()
-	        this.removeRoomId = roomId
-	        this.removeUsers = this.rooms.find(room => room.roomId === roomId).users
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async deleteRoomUser() {
-          console.log('ChatContainer1::deleteRoomUser()')
+        /***********************************************************************
+         * Function. Delete room
+         *
+         * @return {void}
+         */
+         async deleteRoom(roomId) {
+            console.log('ChatContainer1::deleteRoom()', roomId)
 
-	        this.disableForm = true
-	        await firestoreService.removeRoomUser(
-		        this.removeRoomId,
-		        this.removeUserId
-	        )
-	        this.removeRoomId = null
-	        this.removeUserId = ''
-	        this.fetchRooms()
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    async deleteRoom(roomId) {
-          console.log('ChatContainer1::deleteRoom()', roomId)
+            this.roomService.deleteRoom(roomId)
+            showSuccess('Room Deleted')
+        },
 
-	        const room = this.rooms.find(r => r.roomId === roomId)
-	        if (
-		          room.users.find(user => user._id === 'SGmFnBZB4xxMv9V4CVlW')
-		      ||  room.users.find(user => user._id === '6jMsIXUrBHBj7o2cRlau')
-	        ) {
-              return alert('Nope, for demo purposes you cannot delete this room')
-	        }
-	        firestoreService.getMessages(roomId).then(({ data }) => {
-		        data.forEach(message => {
-		            firestoreService.deleteMessage(roomId, message.id)
-		            if (message.files) {
-			            message.files.forEach(file => {
-			                storageService.deleteFile(this.currentUserId, message.id, file)
-			            })
-		            }
-		        })
-	        })
-	        await firestoreService.deleteRoom(roomId)
-	        this.fetchRooms()
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-	    resetForms() {
-          console.log('ChatContainer1::resetForms()')
+        /***********************************************************************
+         * Listener. Loading room messages
+         *
+         * @param {userData} Object { userId: long, lastChanged: Date}
+         *
+         * @return {void}
+         */
+         listen_UsersOnlineStatus(userData) {
+            console.log('ChatContainer1::listen_UsersOnlineStatus()', userData)
 
-	        this.disableForm = false
-	        this.addNewRoom = null
-	        this.addRoomUsername = ''
-	        this.inviteRoomId = null
-	        this.invitedUsername = ''
-	        this.removeRoomId = null
-	        this.removeUserId = ''
-	    },
-// /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
-     /***********************************************************************
-	    * Loading last messages completed
-	    *
-	    * @return {void}
-	    */
-	    _listenLastMessage_completed() {
-          console.log('ChatContainer1::_listenLastMessage_completed().roomsLoaded', this.rooms.length)
+            const lastChanged = formatTimestamp(
+                new Date(userData.lastChanged),
+                new Date(userData.lastChanged)
+            )
+            const online = 'online'
+            // /////////////////////////////////////////////////////////////////
+            // Update user status
+            this.rooms.forEach(room => {
+                room.users.forEach(user => {
+                    if (user.id === userData.userId) {
+                        user.status = { online, lastChanged }
+                    }
+                })
+            })
+        },
 
-          this.loadingRooms = false
-          this.roomsLoadedCount = this.rooms.length
-      },
-// /////////////////////////////////////////////////////////////////////////////
-     /***********************************************************************
-	    * Loading last messages completed
-	    *
-	    * @return {void}
-	    */
-	    _listenLastMessage_room({ roomId, message }) {
-          // console.log('ChatContainer1::_listenLastMessage_room(): ', roomId, message)
-          const roomIndex = this.rooms.findIndex(r => (r.id === roomId))
-          if (roomIndex >= 0) {
-              const room = this.rooms[roomIndex]
-              console.log('ChatContainer1::_listenLastMessage_room(): ', roomId, roomIndex, room)
+        /***********************************************************************
+         * Fetch messages for room
+         *
+         * @param {room} Object Room
+         * @param {message} Object Message
+         *
+         * @return {void}
+         */
+         event_fetchMessages({ room, options = {} }) {
+            // console.log('ChatContainer1::event_fetchMessages()', room, options)
 
-              const lastMessage = this.formatLastMessage(message, room)
-              this.rooms[roomIndex].lastMessage = lastMessage
-              this.rooms = [...this.rooms]
-          }
-      },
-// /////////////////////////////////////////////////////////////////////////////
-      // ,incrementDbCounter(type, size) {
-      //  size = size || 1
-      //  this.dbRequestCount += size
-      //  console.log(type, size)
-      // }
+            this.$emit('show-demo-options', false)
+
+            if (options.reset) {
+                this.resetMessages()
+            }
+
+            const query = this.msgService.messagesQuery(
+                room.id,
+                this.messagesPerPage,
+                this.messagesLoadedCount
+            )
+            this.selectedRoom = room.id
+            // this.showFiles = (room.id === 1) ? 'true' : 'false'
+            this.showFiles = 'true'
+            this.msgService.getRoomMessages(query)
+
+        },
+        /***********************************************************************
+         * Mark message seen
+         *
+         * @param {room} Object Room
+         * @param {message} Object Message
+         *
+         * @return {void}
+         */
+
+         markMessagesSeen(message) {
+            // console.log('ChatContainer1::markMessagesSeen()', message)
+
+            if ((message.idUser !== this.currentUserId) &&
+                (!message.seen || !message.seen[this.currentUserId])) {
+                    console.log('ChatContainer1::markMessagesSeen()', message)
+                    this.msgService.updateMessageSeen(message.id, message.idUser, new Date())
+            }
+        },
+
+        /***********************************************************************
+         * Format message
+         *
+         * @param {room} Object Room
+         * @param {message} Object Message
+         *
+         * @return {void}
+         */
+         formatLastMessage(room, message) {
+            // console.log('ChatContainer1::formatLastMessage()', room, message)
+
+            if (!message.timestamp) return
+            let content = message.content
+
+            if (message.files?.length) {
+                  const file = message.files[0]
+                  content = `${file.name}.${file.extension || file.type}`
+            }
+
+            const username =
+                  (message.idUser !== this.currentUserId)
+                      ? room.users.find(user => message.idUser === user._id)?.username
+                      : ''
+
+            return {
+                ...message,
+                ...{
+                  _id: message.id,
+                  content,
+                  senderId: message.idUser,
+                  timestamp: formatTimestamp(
+                        new Date(message.timestamp.seconds * 1000),
+                        message.timestamp
+                  ),
+                  username,
+                  distributed: true,
+                  seen: (message.idUser === this.currentUserId) ? message.seen : null,
+                  new:
+                      (message.idUser !== this.currentUserId) &&
+                      (!message.seen || !message.seen[this.currentUserId]),
+                },
+            }
+        },
+
+        /***********************************************************************
+         * Format message
+         *
+         * @param {room} Object Room
+         * @param {message} Object Message
+         *
+         * @return {void}
+         */
+         formatMessage(room, message) {
+            // console.log('ChatContainer1::formatMessage()', message)
+
+            // const senderUser = room.users.find(user => user._id === message.sender_id)
+            const formattedMessage = {
+                ...message,
+                ...{
+                    senderId: message.idUser,
+                    _id: message.id,
+                    seconds: message.timestamp.seconds,
+                    timestamp: parseTimestamp(message.timestamp, 'HH:mm'),
+                    date: parseTimestamp(message.timestamp, 'DD MMMM YYYY'),
+                    username: room.users.find(user => message.idUser === user._id)?.username,
+                    // avatar: senderUser ? senderUser.avatar : null,
+                    distributed: true,
+                },
+            }
+            const parentMessage = this.messages.find(msg => (msg.idParent === message.id))
+            if (parentMessage) {
+                // console.log('ChatContainer1::formatMessage()::replyMessage', formattedMessage, replyMessage)
+                parentMessage.replyMessage = {
+                    ...formattedMessage,
+                    ...{
+                        senderId: formattedMessage.idUser,
+                    },
+                }
+            }
+            const replyMessage = this.messages.find(msg => (msg.id === message.idParent))
+            if (replyMessage) {
+                formattedMessage.replyMessage = {
+                    ...replyMessage,
+                    ...{
+                        senderId: replyMessage.idUser,
+                    },
+                }
+            }
+            // console.log('ChatContainer1::formatMessage()', formattedMessage)
+            return formattedMessage
+        },
+
+        /***********************************************************************
+         * Send message
+         *
+         * @param {content} Text Message text
+         * @param {roomId} Long Room id
+         * @param {files} Text Files attached to message
+         * @param {replyMessage} Object Parent to message
+         *
+         * @return {void}
+         */
+         async event_sendMessage({ content, roomId, files, replyMessage }) {
+            // console.log('ChatContainer1::event_sendMessage()', content, roomId, files, replyMessage)
+
+            const message = {
+                idUser: this.currentUserId,
+                idRoom: roomId,
+                content,
+                timestampEnd: new Date(),
+                timestampStart: this.typingMessageCache.timestamp
+                                    ? this.typingMessageCache.timestamp
+                                    : new Date(),
+            }
+
+            if (files) {
+                message.files = this.formattedFiles(files)
+            }
+            if (replyMessage) {
+                message.idParent = replyMessage.id
+            }
+
+            this.msgService.sendRoomMessage(message)
+            showSuccess('Message Sent')
+        },
+
+        /***********************************************************************
+         * Edit message
+         *
+         * @param {message} Object chat message
+         *
+         * @return {void}
+         */
+         async event_editMessage({ messageId, newContent, roomId, files }) {
+            console.log('ChatContainer1::event_editMessage()', messageId, newContent, roomId, files)
+
+            const mesg = this.messages.find(m => (m.id === messageId))
+            const message = {
+                id: messageId,
+                idUser: this.currentUserId,
+                idRoom: roomId,
+                newContent,
+                lastUpdated: new Date(),
+            }
+
+            if (files) {
+                const filesOld = files.filter(obj => Object.prototype.hasOwnProperty.call(obj, 'id'))
+                const filesNew = files.filter(obj => !Object.prototype.hasOwnProperty.call(obj, 'id'))
+                let filesDel = []
+                if (mesg?.files) {
+                    filesDel = mesg.files.filter(obj1 => !filesOld.some(obj2 => obj1.id === obj2.id))
+                }
+                // ////////////////////////////////////////
+                message.filesDel = filesDel
+                message.filesNew = filesNew
+            } else {
+                if (mesg?.files) {
+                    message.filesDel = mesg.files
+                    message.filesNew = []
+                }
+                delete mesg.files
+            }
+
+            this.msgService.updateRoomMessage(message)
+            showSuccess('Message Edited')
+        },
+
+        /***********************************************************************
+         * Delete message (mark as deleted)
+         *
+         * @param {message} Object chat message
+         *
+         * @return {void}
+         */
+         async event_deleteMessage({ message, roomId }) {
+            console.log('ChatContainer1::event_deleteMessage()', message, roomId)
+
+            this.msgService.deleteMessage(message._id, roomId, new Date())
+            const { files } = message
+            if (files) {
+                files.forEach(file => {
+                    this.msgService.deleteMessageFile(message._id, roomId, this.currentUserId, file)
+                })
+            }
+        },
+
+        /***********************************************************************
+         * Update room messages.
+         *
+         * @param {MsgLen} Int array length
+         * @param {message} Object chat message
+         *
+         * @return {void}
+         */
+         listen_MessageDelete({ msgLen, msg }) {
+            console.log('ChatContainer1::listen_MessageDelete(): ', msgLen, msg)
+
+            // ///////////////////////////////////////////////////////////////////
+            // Empty message set - No messages.
+            if (msgLen === 0) {
+                return
+            }
+
+            if (this.selectedRoom !== msg.idRoom) return
+
+            const mesgIndex = this.messages.findIndex(m => (m.id === msg.id))
+            const roomIndex = this.rooms.findIndex(r => (r.id === msg.idRoom))
+
+            // ///////////////////////////////////////////////////////////////////
+            // Check room exist
+            if (mesgIndex >= 0) {
+                const room = this.rooms[roomIndex]
+                const formattedMessage = this.formatMessage(room, msg)
+                this.messages[mesgIndex] = formattedMessage
+                // ///////////////////////////////////////////////////////////////
+                // last message loaded
+                this.messages.sort((a, b) => {
+                    return (a.seconds - b.seconds)
+                })
+            }
+        },
+
+        /***********************************************************************
+         * Update room messages.
+         *
+         * @param {MsgLen} Int array length
+         * @param {message} Object chat message
+         *
+         * @return {void}
+         */
+         listen_MessageUpdate({ msgLen, msg }) {
+            console.log('ChatContainer1::listen_MessageUpdate(): ', msgLen, msg)
+
+            // ///////////////////////////////////////////////////////////////////
+            // Empty message set - No messages.
+            if (msgLen === 0) {
+                return
+            }
+
+            const mesgIndex = this.messages.findIndex(m => (m.id === msg.id))
+            // ///////////////////////////////////////////////////////////////////
+            // Check message exist
+            if (mesgIndex >= 0) {
+                // content
+                this.messages[mesgIndex].content = msg.content
+                // reactions
+                if (msg?.reactions) {
+                    this.messages[mesgIndex].reactions = msg.reactions
+                } else {
+                    delete this.messages[mesgIndex].reactions
+                }
+                // seen
+                if (msg?.seen) {
+                    this.messages[mesgIndex].seen = msg.seen
+                } else {
+                    delete this.messages[mesgIndex].seen
+                }
+                // files
+                if (msg?.files) {
+                    this.messages[mesgIndex].files = msg.files
+                } else {
+                    delete this.messages[mesgIndex].files
+                }
+                // ///////////////////////////////////////////////////////////////
+                this.messages.sort((a, b) => {
+                    return (a.seconds - b.seconds)
+                })
+            }
+        },
+
+        /***********************************************************************
+         * Loading room messages.
+         *
+         * @param {MsgLen} Int array length
+         * @param {message} Object chat message
+         *
+         * @return {void}
+         */
+         listen_NewMessageRoom({ msgLen, msg }) {
+            console.log('ChatContainer1::listen_NewMessageRoom(): ', msgLen, msg)
+
+            // ///////////////////////////////////////////////////////////////////
+            // Empty message set - No messages.
+            if (msgLen === 0) {
+                this.messagesLoaded = true
+                return
+            }
+
+            if (this.selectedRoom !== msg.idRoom) return
+            const roomIndex = this.rooms.findIndex(r => (r.id === msg.idRoom))
+            // ///////////////////////////////////////////////////////////////////
+            // Check room exist
+            if (roomIndex >= 0) {
+                const room = this.rooms[roomIndex]
+                const formattedMessage = this.formatMessage(room, msg)
+                this.messages.unshift(formattedMessage)
+                this.markMessagesSeen(msg)
+                // ///////////////////////////////////////////////////////////////
+                // last message loaded
+                if ((msgLen + this.messagesLoadedCount) === this.messages.length) {
+                    // this.messagesLoaded = true
+                    this.messagesLoadedCount = this.messages.length
+                    this.messages.sort((a, b) => {
+                        return (a.seconds - b.seconds)
+                    })
+                }
+            }
+        },
+
+        /***********************************************************************
+         * Loading last message for room id
+         *
+         * @param {msgLen} Int room Id
+         * @param {message} Object chat message
+         *
+         * @return {void}
+         */
+         listen_LastMessage({ msgLen, msg }) {
+            console.log('ChatContainer1::listen_LastMessage(): ', msgLen, msg)
+            // ///////////////////////////////////////////////////////////////
+            // no messages
+            if (msgLen === 0) {
+                this._lastMessages_completed()
+                return
+            }
+            // ///////////////////////////////////////////////////////////////
+            // find room
+            const roomIndex = this.rooms.findIndex(r => (r.id === msg.idRoom))
+            this.messagesLastCount++
+
+            if (roomIndex >= 0) {
+                const room = this.rooms[roomIndex]
+                const lastMessage = this.formatLastMessage(room, msg)
+                this.rooms[roomIndex].lastMessage = lastMessage
+                // this.rooms = [...this.rooms]
+            }
+            // ///////////////////////////////////////////////////////////////
+            // Last message
+            if (this.messagesLastCount === msgLen) {
+                this._lastMessages_completed()
+            }
+        },
+
+        /***********************************************************************
+         * Loading last messages completed
+         *
+         * @return {void}
+         */
+         _lastMessages_completed() {
+            this.messagesLastCount = 0
+            this.roomsLoaded = true
+            this.loadingRooms = false
+            this.roomsLoadedCount = this.rooms.length
+        },
+
     },
 }
 </script>
@@ -952,7 +1233,7 @@ export default {
 
   .window-mobile {
       form {
-	      padding: 0 10px 10px;
+          padding: 0 10px 10px;
       }
   }
 
@@ -970,7 +1251,7 @@ export default {
       font-size: 14px;
       vertical-align: middle;
       &::placeholder {
-	      color: #9ca6af;
+          color: #9ca6af;
       }
   }
 
@@ -987,15 +1268,15 @@ export default {
       transition: 0.3s;
       vertical-align: middle;
       &:hover {
-	      opacity: 0.8;
+          opacity: 0.8;
       }
       &:active {
-	      opacity: 0.6;
+          opacity: 0.6;
       }
       &:disabled {
-	      cursor: initial;
-	      background: #c6c9cc;
-	      opacity: 0.6;
+          cursor: initial;
+          background: #c6c9cc;
+          opacity: 0.6;
       }
   }
 
